@@ -82,7 +82,6 @@ public class AlienController : MonoBehaviour
 
     IEnumerator Movement()
     {
-
         while (true)
         {
             Vector2 currentDirection = direction.Dequeue();
@@ -91,20 +90,32 @@ public class AlienController : MonoBehaviour
                 direction.Enqueue(currentDirection);
             }
 
+            // Verifica os limites antes de mover
+            Vector2 bounds = GetGroupBounds();
+            float leftWallX = walls[0].position.x;
+            float rightWallX = walls[1].position.x;
+            float margin = 0.8f; // margem de segurança para evitar que saiam da tela
+
+            if ((currentDirection == Vector2.right && bounds.y >= rightWallX - margin) ||
+                (currentDirection == Vector2.left && bounds.x <= leftWallX + margin))
+            {
+                direction.Clear();
+                direction.Enqueue(Vector2.down); // desce no próximo ciclo
+                direction.Enqueue(currentDirection == Vector2.right ? Vector2.left : Vector2.right); // muda direção horizontal
+            }
+
             for (int i = 0; i < aliens.GetLength(1); i++)
             {
                 for (int j = 0; j < aliens.GetLength(0); j++)
                 {
-                    if (aliens[j, i] != null)
+                    if (aliens[j, i] != null && aliens[j, i].gameObject.activeSelf)
                     {
                         aliens[j, i].MoveTo(currentDirection, alienSpeed);
                     }
                 }
                 yield return new WaitForSeconds(movementDelay);
             }
-
         }
-
     }
 
     IEnumerator SpecialAlienRoutine()
@@ -120,4 +131,23 @@ public class AlienController : MonoBehaviour
             specialAlien.StartMove(walls[otherside]);
         }
     }
+
+    Vector2 GetGroupBounds()
+    {
+        float minX = float.MaxValue;
+        float maxX = float.MinValue;
+
+        foreach (Alien a in aliens)
+        {
+            if (a != null && a.gameObject.activeSelf)
+            {
+                float x = a.transform.position.x;
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+            }
+        }
+
+        return new Vector2(minX, maxX);
+    }
+
 }

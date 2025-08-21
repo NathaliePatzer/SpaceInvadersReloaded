@@ -3137,25 +3137,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a50a569462e7e5440a65663032adf4a1, type: 3}
---- !u!1 &1121800970 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8267007312597136427, guid: a50a569462e7e5440a65663032adf4a1, type: 3}
-  m_PrefabInstance: {fileID: 743776358}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1121800977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1121800970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8476e1f2666d9b4895fbc752cb09fb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: {x: -1, y: 0}
-  wall: {fileID: 1582568427}
 --- !u!1001 &1133250340
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6344,25 +6325,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a50a569462e7e5440a65663032adf4a1, type: 3}
---- !u!1 &1980997734 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8267007312597136427, guid: a50a569462e7e5440a65663032adf4a1, type: 3}
-  m_PrefabInstance: {fileID: 8267007311879297219}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1980997741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980997734}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8476e1f2666d9b4895fbc752cb09fb0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  direction: {x: 1, y: 0}
-  wall: {fileID: 178580069}
 --- !u!1001 &1987608919
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7635,6 +7597,10 @@ PrefabInstance:
     - target: {fileID: 6080538157007607698, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}
       propertyPath: m_Name
       value: PlayerShip
+      objectReference: {fileID: 0}
+    - target: {fileID: 7447667029129298756, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}
+      propertyPath: cooldown
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}
