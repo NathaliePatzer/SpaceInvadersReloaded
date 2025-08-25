@@ -9,6 +9,8 @@ using Random = UnityEngine.Random;
 
 public class AlienController : MonoBehaviour
 {
+    [SerializeField] private GameObject fireRatePowerUpPrefab;
+    [SerializeField] private float dropChance = 0.1f;
     public static AlienController Instance;
     public float alienSpeed = 0.1f;
     public float movementDelay = 0.1f;
@@ -32,8 +34,25 @@ public class AlienController : MonoBehaviour
         StartCoroutine(SpecialAlienRoutine());
     }
 
+
+    public void TryDropPowerUp(Vector3 position)
+    {
+        if (Random.value < dropChance)
+        {
+            Instantiate(fireRatePowerUpPrefab, position, Quaternion.identity);
+        }
+    }
+
+
     public void OnAlienDeath(Vector2Int matrixPos)
     {
+
+        Alien alien = aliens[matrixPos.x, matrixPos.y];
+        if (alien != null)
+        {
+            TryDropPowerUp(alien.transform.position);
+        }
+
         Alien nextAlien = null;
         remainingAliens--;
         movementDelay -= 0.0025f;
@@ -149,5 +168,7 @@ public class AlienController : MonoBehaviour
 
         return new Vector2(minX, maxX);
     }
+
+
 
 }

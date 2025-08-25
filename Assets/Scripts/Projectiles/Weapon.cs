@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+
+    //public float fireCooldown = 0.5f;
     public Bullet bullet;
     public Vector2 bulletDirection;
     public float bulletSpeed;
@@ -31,4 +33,11 @@ public class Weapon : MonoBehaviour
         if (audioSource != null)
             audioSource.Play();
     }
+
+
+    public void ReduceCooldown(float amount)
+    {
+        cooldown = Mathf.Max(0.1f, cooldown - amount);
+    }
+
 }

@@ -1694,6 +1694,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 651f022e581da5e43bd6ba166beb8a92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireRatePowerUpPrefab: {fileID: 558804197423631497, guid: 66112d264be0d4847849356fc25c5173, type: 3}
+  dropChance: 0.1
   alienSpeed: 0.3
   movementDelay: 0.2
   specialAlienPrefab: {fileID: 8628349193566762656, guid: a72fc2a5cb2bbbb4180cee0975b4e60c, type: 3}
@@ -7598,9 +7600,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerShip
       objectReference: {fileID: 0}
+    - target: {fileID: 6080538157007607698, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 7447667029129298756, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}
       propertyPath: cooldown
-      value: 0.2
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}

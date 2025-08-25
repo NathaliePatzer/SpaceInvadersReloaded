@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour, IShootable
 {
+    Coroutine cooldownRoutine;
+    float originalCooldown;
     public Team team;
     public float speed = 10;
     public int lives = 3;
@@ -25,25 +27,32 @@ public class PlayerController : MonoBehaviour, IShootable
         coll = GetComponent<Collider2D>();
         audioSource = GetComponent<AudioSource>();
         _speed = speed;
+        originalCooldown = weapon.cooldown;
     }
 
-    private void FixedUpdate() {
-        rb.MovePosition(rb.position + movement * Time.fixedDeltaTime*speed);
+    private void FixedUpdate()
+    {
+        rb.MovePosition(rb.position + movement * Time.fixedDeltaTime * speed);
     }
 
-    public void Movement(InputAction.CallbackContext context) {
+    public void Movement(InputAction.CallbackContext context)
+    {
         //down
-        if(context.performed) {
+        if (context.performed)
+        {
             movement = context.ReadValue<Vector2>();
         }
         //up
-        else if(context.canceled) {
+        else if (context.canceled)
+        {
             movement = Vector2.zero;
         }
     }
 
-    public void Shoot(InputAction.CallbackContext context) {
-        if(context.performed) {
+    public void Shoot(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
             weapon.ShootBullet();
         }
     }
@@ -60,10 +69,11 @@ public class PlayerController : MonoBehaviour, IShootable
         if (lives <= 0)
         {
             GameOver.Instance.OnGameOver(2000);
-        } 
+        }
     }
 
-    public Team GetTeam() {
+    public Team GetTeam()
+    {
         return team;
     }
 
@@ -75,4 +85,27 @@ public class PlayerController : MonoBehaviour, IShootable
         coll.enabled = true;
         speed = _speed;
     }
+
+    public void ReduceWeaponCooldown(float amount, float duration)
+    {
+        if (cooldownRoutine != null)
+        {
+            StopCoroutine(cooldownRoutine);
+            weapon.cooldown = originalCooldown; // restaura antes de aplicar novo
+        }
+
+        originalCooldown = weapon.cooldown;
+        cooldownRoutine = StartCoroutine(ApplyTemporaryCooldown(amount, duration));
+    }
+
+    IEnumerator ApplyTemporaryCooldown(float amount, float duration)
+    {
+        weapon.cooldown = Mathf.Max(0.1f, weapon.cooldown - amount);
+
+        yield return new WaitForSeconds(duration);
+
+        weapon.cooldown = originalCooldown;
+        cooldownRoutine = null;
+    }
+
 }
