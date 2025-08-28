@@ -29,13 +29,21 @@ public class PortalPowerUp : MonoBehaviour
         Vector3 portalPosition = new Vector3(0f, -1.63f, 0f);
         GameObject existingPortal = GameObject.FindWithTag("Portal");
 
-        if (existingPortal == null)
+        bool shouldSpawnNewPortal = true;
+
+        if (existingPortal != null)
+        {
+            PortalController controller = existingPortal.GetComponent<PortalController>();
+            if (controller != null && !controller.IsDisappearing())
+            {
+                controller.StartPortal(portalDuration);
+                shouldSpawnNewPortal = false;
+            }
+        }
+
+        if (shouldSpawnNewPortal)
         {
             StartCoroutine(SpawnPortalSequence(portalPosition));
-        }
-        else
-        {
-            existingPortal.GetComponent<PortalController>().StartPortal(portalDuration);
         }
 
         rb.velocity = Vector2.zero;

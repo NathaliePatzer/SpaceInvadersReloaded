@@ -35,6 +35,7 @@ public class PortalController : MonoBehaviour
     private IEnumerator PlayExitAnimationAndDestroy()
     {
         isDisappearing = true;
+        isActive = false;
 
         if (animator != null)
         {
@@ -44,4 +45,10 @@ public class PortalController : MonoBehaviour
 
         Destroy(gameObject);
     }
+
+    public bool IsDisappearing()
+    {
+        return isDisappearing;
+    }
+
 }
