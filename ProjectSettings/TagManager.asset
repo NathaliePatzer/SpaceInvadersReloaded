@@ -6,6 +6,7 @@ TagManager:
   tags:
   - AlienProjectile
   - Portal
+  - SpecialHeart
   layers:
   - Default
   - TransparentFX

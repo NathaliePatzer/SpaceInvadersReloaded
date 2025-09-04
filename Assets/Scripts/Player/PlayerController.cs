@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour, IShootable
 {
@@ -18,6 +16,11 @@ public class PlayerController : MonoBehaviour, IShootable
     Animator animator;
     Collider2D coll;
     AudioSource audioSource;
+    private SpriteRenderer spriteRenderer;
+
+    private bool hasSpecialLife = false;
+    private Coroutine specialLifeRoutine;
+    private Vector3 originalScale;
 
     private void Awake()
     {
@@ -26,8 +29,10 @@ public class PlayerController : MonoBehaviour, IShootable
         animator = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
         audioSource = GetComponent<AudioSource>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         _speed = speed;
         originalCooldown = weapon.cooldown;
+        originalScale = transform.localScale;
     }
 
     private void FixedUpdate()
@@ -37,45 +42,74 @@ public class PlayerController : MonoBehaviour, IShootable
 
     public void Movement(InputAction.CallbackContext context)
     {
-        //down
         if (context.performed)
-        {
             movement = context.ReadValue<Vector2>();
-        }
-        //up
         else if (context.canceled)
-        {
             movement = Vector2.zero;
-        }
     }
 
     public void Shoot(InputAction.CallbackContext context)
     {
         if (context.performed)
-        {
             weapon.ShootBullet();
-        }
     }
 
     public void OnShot(Bullet bullet)
     {
         bullet.speed = 0;
+
+        if (hasSpecialLife)
+        {
+            hasSpecialLife = false;
+            audioSource.Play();
+            StartCoroutine(Invencible());
+            StartCoroutine(BlinkBeforeResetScale());
+
+            if (specialLifeRoutine != null)
+            {
+                StopCoroutine(specialLifeRoutine);
+                specialLifeRoutine = null;
+            }
+
+            GameObject heart = GameObject.FindWithTag("SpecialHeart");
+            if (heart != null)
+            {
+                Animator heartAnimator = heart.GetComponent<Animator>();
+                if (heartAnimator != null)
+                {
+
+                    HeartStatus heartStatus = heart.GetComponent<HeartStatus>();
+                    if (heartStatus != null)
+                    {
+                        heartStatus.TriggerDisappear();
+                        StartCoroutine(DestroyAfterAnimation(heart.GetComponent<Animator>(), 1f));
+                    }
+
+                }
+            }
+
+            return;
+        }
+
         lives--;
         LivesHearts.Instance.UpdateHearts(lives);
         animator.SetTrigger("Death");
         animator.SetInteger("Lives", lives);
         audioSource.Play();
         StartCoroutine(Invencible());
+
         if (lives <= 0)
-        {
             GameOver.Instance.OnGameOver(2000);
-        }
     }
 
-    public Team GetTeam()
+    private IEnumerator DestroyAfterAnimation(Animator animator, float delay)
     {
-        return team;
+        yield return new WaitForSeconds(delay);
+        if (animator != null && animator.gameObject != null)
+            Destroy(animator.gameObject);
     }
+
+    public Team GetTeam() => team;
 
     IEnumerator Invencible()
     {
@@ -91,7 +125,7 @@ public class PlayerController : MonoBehaviour, IShootable
         if (cooldownRoutine != null)
         {
             StopCoroutine(cooldownRoutine);
-            weapon.cooldown = originalCooldown; // restaura antes de aplicar novo
+            weapon.cooldown = originalCooldown;
         }
 
         originalCooldown = weapon.cooldown;
@@ -101,11 +135,84 @@ public class PlayerController : MonoBehaviour, IShootable
     IEnumerator ApplyTemporaryCooldown(float amount, float duration)
     {
         weapon.cooldown = Mathf.Max(0.1f, weapon.cooldown - amount);
-
         yield return new WaitForSeconds(duration);
-
         weapon.cooldown = originalCooldown;
         cooldownRoutine = null;
+    }
+
+    public void ActivateSpecialLife(float duration, Vector3 newScale)
+    {
+        if (hasSpecialLife)
+        {
+            if (specialLifeRoutine != null)
+                StopCoroutine(specialLifeRoutine);
+        }
+        else
+        {
+            hasSpecialLife = true;
+            StartCoroutine(BlinkBeforeScale(newScale));
+        }
+
+        specialLifeRoutine = StartCoroutine(SpecialLifeTimer(duration));
+    }
+
+    private IEnumerator BlinkBeforeScale(Vector3 newScale)
+    {
+        int blinkCount = 4;
+        float blinkInterval = 0.1f;
+
+        for (int i = 0; i < blinkCount; i++)
+        {
+            spriteRenderer.enabled = false;
+            yield return new WaitForSeconds(blinkInterval);
+            spriteRenderer.enabled = true;
+            yield return new WaitForSeconds(blinkInterval);
+        }
+
+        transform.localScale = newScale;
+    }
+
+    private IEnumerator BlinkBeforeResetScale()
+    {
+        int blinkCount = 4;
+        float blinkInterval = 0.1f;
+
+        for (int i = 0; i < blinkCount; i++)
+        {
+            spriteRenderer.enabled = false;
+            yield return new WaitForSeconds(blinkInterval);
+            spriteRenderer.enabled = true;
+            yield return new WaitForSeconds(blinkInterval);
+        }
+
+        transform.localScale = originalScale;
+    }
+
+
+    private IEnumerator SpecialLifeTimer(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        hasSpecialLife = false;
+
+        // Faz o coração desaparecer
+        GameObject heart = GameObject.FindWithTag("SpecialHeart");
+        if (heart != null)
+        {
+            Animator heartAnimator = heart.GetComponent<Animator>();
+            if (heartAnimator != null)
+            {
+
+                HeartStatus heartStatus = heart.GetComponent<HeartStatus>();
+                if (heartStatus != null)
+                {
+                    heartStatus.TriggerDisappear();
+                    StartCoroutine(DestroyAfterAnimation(heart.GetComponent<Animator>(), 1f));
+                }
+
+            }
+        }
+
+        StartCoroutine(BlinkBeforeResetScale());
     }
 
 }
