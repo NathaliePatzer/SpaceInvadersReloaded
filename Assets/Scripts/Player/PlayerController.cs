@@ -119,6 +119,16 @@ public class PlayerController : MonoBehaviour, IShootable
         coll.enabled = true;
         speed = _speed;
     }
+    public IEnumerator NoCollider()
+    {
+        Debug.Log("No collider ON");
+        coll.enabled = false;
+        speed = 0;
+        yield return new WaitForSeconds(1.1f);
+        coll.enabled = true;
+        speed = _speed;
+        Debug.Log("No collider OFF");
+    }
 
     public void ReduceWeaponCooldown(float amount, float duration)
     {

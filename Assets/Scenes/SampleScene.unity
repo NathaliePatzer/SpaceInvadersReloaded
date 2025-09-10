@@ -7555,6 +7555,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 523229699, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}
+      propertyPath: m_Size.x
+      value: 0.81
+      objectReference: {fileID: 0}
     - target: {fileID: 2571720960017502363, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -7621,7 +7625,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7447667029129298756, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}
       propertyPath: cooldown
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 02eb3a5afa79f1b45acbd64f2c29eb6a, type: 3}

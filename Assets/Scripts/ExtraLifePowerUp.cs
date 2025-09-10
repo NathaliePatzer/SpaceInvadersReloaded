@@ -34,6 +34,7 @@ public class ExtraLifePowerUp : MonoBehaviour
             if (player != null)
             {
                 player.ActivateSpecialLife(effectDuration, enlargedScale);
+                player.StartCoroutine(player.NoCollider());
 
                 GameObject existingHeart = GameObject.FindWithTag("SpecialHeart");
 
