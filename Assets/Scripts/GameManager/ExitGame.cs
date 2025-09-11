@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ExitGame : MonoBehaviour
 {
@@ -8,11 +9,8 @@ public class ExitGame : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Application.Quit();
-            // Para verificar no Editor (opcional):
-            #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-            #endif
+            Time.timeScale = 1; // ✅ Garante que o tempo volte ao normal
+            SceneManager.LoadScene("Menu");
         }
     }
 }
