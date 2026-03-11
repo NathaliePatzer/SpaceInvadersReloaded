@@ -7,54 +7,61 @@ using Random = UnityEngine.Random;
 public class AlienController : MonoBehaviour
 {
     [SerializeField] private GameObject fireRatePowerUpPrefab;
-    [SerializeField] private GameObject portalPowerUpPrefab; // Novo power-up
+    [SerializeField] private GameObject portalPowerUpPrefab; 
     [SerializeField] private float dropChance = 0.1f;
-    [SerializeField] private float portalDropChance = 0.5f; // Chance separada para o portal
+    [SerializeField] private float portalDropChance = 0.5f; 
 
     public static AlienController Instance;
     public float alienSpeed = 0.1f;
     public float movementDelay = 0.1f;
+    
+    private float originalMovementDelay; // Para resetar a cada fase
+    
     public Queue<Vector2> direction;
     public Alien[,] aliens = new Alien[15, 5];
     public SpecialAlien specialAlienPrefab;
     public List<Transform> walls;
     int remainingAliens;
+    
+    GameObject currentWaveInstance; // Guarda a wave atual para poder deletar depois
 
     void Awake()
     {
-        direction = new Queue<Vector2>();
-        direction.Enqueue(Vector2.right);
-        remainingAliens = aliens.GetLength(0) * aliens.GetLength(1);
         Instance = this;
-        SetMatrix();
-        SetInitialShooting();
+        direction = new Queue<Vector2>();
+        originalMovementDelay = movementDelay;
+        // Removemos o SetMatrix e as coroutines daqui! O WaveManager que vai mandar começar.
     }
 
-    void Start()
+    // NOVA FUNÇÃO: O WaveManager chama essa função e passa o Prefab
+    public void InitializeWave(GameObject wavePrefab)
     {
+        StopAllCoroutines(); // Para a horda anterior, se houver
+        direction.Clear();
+        direction.Enqueue(Vector2.right);
+        Array.Clear(aliens, 0, aliens.Length); // Limpa a matriz antiga
+        movementDelay = originalMovementDelay; // Reseta a velocidade pros aliens não começarem voando
+
+        if (currentWaveInstance != null) 
+            Destroy(currentWaveInstance); // Limpa a sujeira da wave anterior
+
+        // Instancia a nova Wave como filha do AlienController
+        currentWaveInstance = Instantiate(wavePrefab, transform.position, Quaternion.identity, transform);
+
+        SetMatrix();
+        SetInitialShooting();
         StartCoroutine(Movement());
         StartCoroutine(SpecialAlienRoutine());
     }
 
-    // 0.0–0.1: cooldown
-    // 0.1–0.2: portal
-    // >0.2: nenhum
-    // a soma das chances não deve ultrapassar 1.0, senão sempre vai cair em algum power-up
-
     public void TryDropPowerUp(Vector3 position)
     {
         float roll = Random.value;
-
         if (roll < dropChance)
-        {
             Instantiate(fireRatePowerUpPrefab, position, Quaternion.identity);
-        }
         else if (roll < dropChance + portalDropChance)
-        {
             Instantiate(portalPowerUpPrefab, position, Quaternion.identity);
-        }
     }
-
 
     public void OnAlienDeath(Vector2Int matrixPos)
     {
@@ -64,32 +71,36 @@ public class AlienController : MonoBehaviour
             TryDropPowerUp(alien.transform.position);
         }
 
-        Alien nextAlien = null;
         remainingAliens--;
         movementDelay -= 0.0025f;
         BGMController.Instance.IncreaseSpeed();
 
+        // AQUÍ É A MÁGICA: Em vez de Game Over, chamamos a próxima Wave!
         if (remainingAliens <= 0)
         {
-            GameOver.Instance.OnGameOver(1000);
+            StopAllCoroutines(); // Para tudo dessa wave
+            WaveManager.Instance.OnWaveCompleted(); // Avisa o chefe!
+            return; // Importante para ele não tentar atirar depois de morto
         }
 
+        Alien nextAlien = null;
         for (int i = matrixPos.y + 1; i < aliens.GetLength(1) && nextAlien == null; i++)
         {
             nextAlien = aliens[matrixPos.x, i];
         }
 
-        if (nextAlien == null)
+        if (nextAlien != null)
         {
-            return;
+            nextAlien.StartShooting();
         }
-
-        nextAlien.StartShooting();
     }
 
     void SetMatrix()
     {
-        Alien[] alienGOs = GetComponentsInChildren<Alien>();
+        // Agora ele lê apenas os aliens da Wave instanciada, não da cena inteira
+        Alien[] alienGOs = currentWaveInstance.GetComponentsInChildren<Alien>();
+        remainingAliens = alienGOs.Length; // Muito mais seguro! Permite waves com "buracos" no desenho.
+
         float offsetX = 8;
         float offsetY = -1.44f;
         foreach (Alien a in alienGOs)
@@ -105,19 +116,18 @@ public class AlienController : MonoBehaviour
     {
         for (int i = 0; i < aliens.GetLength(0); i++)
         {
-            aliens[i, 0].StartShooting();
+            if (aliens[i, 0] != null) // Prevenção de erro caso a wave tenha espaços vazios
+                aliens[i, 0].StartShooting();
         }
     }
 
+    // ... (Os métodos Movement(), SpecialAlienRoutine() e GetGroupBounds() continuam EXATAMENTE IGUAIS ao seu original)
     IEnumerator Movement()
     {
         while (true)
         {
             Vector2 currentDirection = direction.Dequeue();
-            if (direction.Count == 0)
-            {
-                direction.Enqueue(currentDirection);
-            }
+            if (direction.Count == 0) direction.Enqueue(currentDirection);
 
             Vector2 bounds = GetGroupBounds();
             float leftWallX = walls[0].position.x;
@@ -174,7 +184,6 @@ public class AlienController : MonoBehaviour
                 if (x > maxX) maxX = x;
             }
         }
-
         return new Vector2(minX, maxX);
     }
 }
