@@ -9,6 +9,7 @@ public class WaveManager : MonoBehaviour
 
     [Header("Configuração das Waves")]
     public GameObject[] wavePrefabs; // Arraste os prefabs Wave_01, Wave_02 aqui
+    public AudioClip[] waveMusics;
     public int currentWaveIndex = 0;
 
     [Header("Interface (UI)")]
@@ -37,9 +38,15 @@ public class WaveManager : MonoBehaviour
 
         // 2. Instancia o prefab da wave atual
         GameObject currentWavePrefab = wavePrefabs[currentWaveIndex];
-        
+
         // 3. Manda o AlienController assumir o controle!
         AlienController.Instance.InitializeWave(currentWavePrefab);
+
+        //4 . Chamar o BGM
+        if (currentWaveIndex < waveMusics.Length && waveMusics[currentWaveIndex] != null)
+        {
+            BGMController.Instance.PlayNewTrack(waveMusics[currentWaveIndex]);
+        }
     }
 
     public void OnWaveCompleted()
@@ -56,7 +63,7 @@ public class WaveManager : MonoBehaviour
             // Acabaram as waves! Aqui você vai colocar o Boss no futuro.
             // Por enquanto, vamos dar um Game Over de vitória.
             Debug.Log("Todas as waves concluídas!");
-            GameOver.Instance.OnGameOver(2000); 
+            GameOver.Instance.OnGameOver(2000);
         }
     }
 }

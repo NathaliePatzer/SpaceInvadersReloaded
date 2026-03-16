@@ -1322,6 +1322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wavePrefabs:
   - {fileID: 7729077668614923750, guid: 0b63ef876f2f800459598a11f16bf004, type: 3}
+  - {fileID: 6023491495992888228, guid: bf5f13b118e398a44873a43500e3057b, type: 3}
   currentWaveIndex: 0
   waveText: {fileID: 2058780657}
 --- !u!4 &1486944394
