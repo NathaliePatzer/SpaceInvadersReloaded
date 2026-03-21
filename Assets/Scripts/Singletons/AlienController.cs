@@ -7,22 +7,22 @@ using Random = UnityEngine.Random;
 public class AlienController : MonoBehaviour
 {
     [SerializeField] private GameObject fireRatePowerUpPrefab;
-    [SerializeField] private GameObject portalPowerUpPrefab; 
+    [SerializeField] private GameObject portalPowerUpPrefab;
     [SerializeField] private float dropChance = 0.1f;
-    [SerializeField] private float portalDropChance = 0.5f; 
+    [SerializeField] private float portalDropChance = 0.5f;
 
     public static AlienController Instance;
     public float alienSpeed = 0.1f;
     public float movementDelay = 0.1f;
-    
+
     private float originalMovementDelay; // Para resetar a cada fase
-    
+
     public Queue<Vector2> direction;
     public Alien[,] aliens = new Alien[15, 5];
     public SpecialAlien specialAlienPrefab;
     public List<Transform> walls;
     int remainingAliens;
-    
+
     GameObject currentWaveInstance; // Guarda a wave atual para poder deletar depois
 
     void Awake()
@@ -36,22 +36,36 @@ public class AlienController : MonoBehaviour
     // NOVA FUNÇÃO: O WaveManager chama essa função e passa o Prefab
     public void InitializeWave(GameObject wavePrefab)
     {
-        StopAllCoroutines(); // Para a horda anterior, se houver
+        StopAllCoroutines();
         direction.Clear();
         direction.Enqueue(Vector2.right);
-        Array.Clear(aliens, 0, aliens.Length); // Limpa a matriz antiga
-        movementDelay = originalMovementDelay; // Reseta a velocidade pros aliens não começarem voando
+        Array.Clear(aliens, 0, aliens.Length);
+        movementDelay = originalMovementDelay;
 
-        if (currentWaveInstance != null) 
-            Destroy(currentWaveInstance); // Limpa a sujeira da wave anterior
+        if (currentWaveInstance != null)
+            Destroy(currentWaveInstance);
 
-        // Instancia a nova Wave como filha do AlienController
         currentWaveInstance = Instantiate(wavePrefab, transform.position, Quaternion.identity, transform);
 
-        SetMatrix();
-        SetInitialShooting();
-        StartCoroutine(Movement());
-        StartCoroutine(SpecialAlienRoutine());
+        // --- A MÁGICA DA DETECÇÃO ---
+        // Ele procura se essa Wave tem aliens comuns dentro dela
+        Alien[] alienGOs = currentWaveInstance.GetComponentsInChildren<Alien>();
+
+        if (alienGOs.Length > 0)
+        {
+            // É UMA WAVE NORMAL! Faz o trabalho de sempre:
+            SetMatrix();
+            SetInitialShooting();
+            StartCoroutine(Movement());
+            StartCoroutine(SpecialAlienRoutine());
+        }
+        else
+        {
+            // É UM CHEFÃO!
+            // Não iniciamos o movimento em matriz.
+            // O próprio script do Demogorgon vai assumir o controle a partir daqui!
+            Debug.Log("Wave de Boss detectada! AlienController em modo de espera.");
+        }
     }
 
     public void TryDropPowerUp(Vector3 position)

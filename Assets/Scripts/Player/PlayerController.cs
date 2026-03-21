@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour, IShootable
     private bool hasSpecialLife = false;
     private Coroutine specialLifeRoutine;
     private Vector3 originalScale;
+    private bool isInvincibleFlag = false;
 
     private void Awake()
     {
@@ -56,7 +57,20 @@ public class PlayerController : MonoBehaviour, IShootable
 
     public void OnShot(Bullet bullet)
     {
-        bullet.speed = 0;
+        if (bullet != null)
+            bullet.speed = 0;
+
+        TakeDamage(); // Chama a nossa nova função central de dano!
+    }
+
+    // NOVA FUNÇÃO: Faz exatamente tudo o que você já tinha programado!
+    public void TakeDamage()
+    {
+        // 1. O CADEADO: Se já estiver invencível, ignora o dano do segundo morcego!
+        if (isInvincibleFlag) return;
+
+        // 2. Tranca o cadeado na hora que toma o primeiro dano
+        isInvincibleFlag = true;
 
         if (hasSpecialLife)
         {
@@ -77,17 +91,14 @@ public class PlayerController : MonoBehaviour, IShootable
                 Animator heartAnimator = heart.GetComponent<Animator>();
                 if (heartAnimator != null)
                 {
-
                     HeartStatus heartStatus = heart.GetComponent<HeartStatus>();
                     if (heartStatus != null)
                     {
                         heartStatus.TriggerDisappear();
                         StartCoroutine(DestroyAfterAnimation(heart.GetComponent<Animator>(), 1f));
                     }
-
                 }
             }
-
             return;
         }
 
@@ -118,6 +129,9 @@ public class PlayerController : MonoBehaviour, IShootable
         yield return new WaitForSeconds(1.5f);
         coll.enabled = true;
         speed = _speed;
+
+        // 3. ABRE O CADEADO: O jogador pode tomar dano de novo!
+        isInvincibleFlag = false;
     }
     public IEnumerator NoCollider()
     {

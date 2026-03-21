@@ -1173,7 +1173,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 24300002, guid: 395f7095c0ce5674e8d9b03521d6e0d0, type: 2}
   m_audioClip: {fileID: 8300000, guid: a8c7aaf4bcc37ae42a2340f2558bb04c, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 1
@@ -1270,7 +1270,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c111c512fb8d5db49b2c0b81b27b5703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  increaseAmount: 0.013
+  increaseAmount: 0.009
+  audioSource: {fileID: 0}
 --- !u!4 &1350516641
 Transform:
   m_ObjectHideFlags: 0
@@ -1323,6 +1324,9 @@ MonoBehaviour:
   wavePrefabs:
   - {fileID: 7729077668614923750, guid: 0b63ef876f2f800459598a11f16bf004, type: 3}
   - {fileID: 6023491495992888228, guid: bf5f13b118e398a44873a43500e3057b, type: 3}
+  waveMusics:
+  - {fileID: 8300000, guid: 080081145a06bc64983d97e12341ee66, type: 3}
+  - {fileID: 8300000, guid: f6b79e4e7da6e484aa7db74ebaf19f02, type: 3}
   currentWaveIndex: 0
   waveText: {fileID: 2058780657}
 --- !u!4 &1486944394

@@ -7,6 +7,8 @@ TagManager:
   - AlienProjectile
   - Portal
   - SpecialHeart
+  - Bullet
+  - Boss
   layers:
   - Default
   - TransparentFX
