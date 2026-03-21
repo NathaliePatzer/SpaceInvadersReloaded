@@ -4,8 +4,8 @@ public class DemobatController : MonoBehaviour
 {
     [Header("Status do Morcego")]
     public float speed = 3f; // Velocidade de queda
-    public float frequency = 5f; // Quão rápido ele faz o zigue-zague
-    public float magnitude = 1.5f; // Quão largo é o zigue-zague
+    public float frequency = 3f; // Quão rápido ele faz o zigue-zague
+    public float magnitude = 3.5f; // Quão largo é o zigue-zague
 
     private Vector3 startPosition;
     private float aliveTime;

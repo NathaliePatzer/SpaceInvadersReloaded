@@ -169,5 +169,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 3
-  frequency: 5
+  frequency: 3
   magnitude: 1.5

@@ -25,6 +25,10 @@ public class AlienController : MonoBehaviour
 
     GameObject currentWaveInstance; // Guarda a wave atual para poder deletar depois
 
+    [Header("Barreiras de Defesa")]
+    public GameObject barrierGroupPrefab; // A "planta" das barreiras
+    private GameObject currentBarrierGroup; // A barreira que está viva na tela no momento
+
     void Awake()
     {
         Instance = this;
@@ -47,6 +51,7 @@ public class AlienController : MonoBehaviour
 
         currentWaveInstance = Instantiate(wavePrefab, transform.position, Quaternion.identity, transform);
 
+
         // --- A MÁGICA DA DETECÇÃO ---
         // Ele procura se essa Wave tem aliens comuns dentro dela
         Alien[] alienGOs = currentWaveInstance.GetComponentsInChildren<Alien>();
@@ -54,6 +59,13 @@ public class AlienController : MonoBehaviour
         if (alienGOs.Length > 0)
         {
             // É UMA WAVE NORMAL! Faz o trabalho de sempre:
+
+            // Se as barreiras não existirem na tela, a gente cria elas novinhas em folha!
+            if (currentBarrierGroup == null && barrierGroupPrefab != null)
+            {
+                currentBarrierGroup = Instantiate(barrierGroupPrefab);
+            }
+
             SetMatrix();
             SetInitialShooting();
             StartCoroutine(Movement());
@@ -64,6 +76,11 @@ public class AlienController : MonoBehaviour
             // É UM CHEFÃO!
             // Não iniciamos o movimento em matriz.
             // O próprio script do Demogorgon vai assumir o controle a partir daqui!
+            // Destrói as barreiras para deixar a arena limpa e perigosa!
+            if (currentBarrierGroup != null)
+            {
+                Destroy(currentBarrierGroup);
+            }
             Debug.Log("Wave de Boss detectada! AlienController em modo de espera.");
         }
     }
