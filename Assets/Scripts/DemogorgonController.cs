@@ -4,7 +4,7 @@ using UnityEngine;
 public class DemogorgonController : MonoBehaviour
 {
     [Header("Status do Boss")]
-    public int maxHealth = 50;
+    public int maxHealth = 112;
     private int currentHealth;
 
     [Header("Ataques e Summons")]
@@ -31,6 +31,10 @@ public class DemogorgonController : MonoBehaviour
     public int teleportBlinkCount = 3;       // Quantas vezes ele vai piscar
     public float teleportBlinkDuration = 0.1f; // O tempo que ele fica "apagado" e "aceso" na piscada
 
+    [Header("Barra de Vida (UI Visual)")]
+    public SpriteRenderer lifebarRenderer; // O componente que vai mostrar a barra na tela
+    public Sprite[] lifebarSprites; // A lista com os seus 15 sprites
+
     // Otimização: guardar os componentes para não procurar toda hora
     private SpriteRenderer spriteRenderer;
     private Collider2D bossCollider;
@@ -51,6 +55,9 @@ public class DemogorgonController : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+
+        UpdateLifebar();
+
         Debug.Log("O Demogorgon rasgou a realidade e entrou na tela!");
 
         // 1. Esconde o boss logo no primeiro frame para ele não piscar na posição errada do Prefab
@@ -170,8 +177,11 @@ public class DemogorgonController : MonoBehaviour
         currentHealth -= damage;
         Debug.Log("Vida do Boss: " + currentHealth);
 
-        // --- NOVO: Toca o efeito visual de dano! ---
+        // --- Toca o efeito visual de dano! ---
         StartHitFlash();
+
+        // ---  Atualiza o sprite da barra de vida após tomar o tiro! ---
+        UpdateLifebar();
 
         // Se a vida zerar, ele morre
         if (currentHealth <= 0)
@@ -249,5 +259,24 @@ public class DemogorgonController : MonoBehaviour
             // (Coloquei 1 de dano, mas se o seu tiro for mais forte, pode mudar esse número)
             TakeDamage(1);
         }
+    }
+
+    void UpdateLifebar()
+    {
+        // Se você esquecer de colocar o renderer ou os sprites na Unity, ele não faz nada (evita erros)
+        if (lifebarRenderer == null || lifebarSprites.Length == 0) return;
+
+        // Evita que a vida fique negativa e quebre a matemática
+        int vidaSegura = Mathf.Max(0, currentHealth);
+
+        // A mágica: divide a vida por 8 e arredonda para cima. 
+        // Ex: 112/8 = 14. Vida 105/8 = 13.1 (arredonda pra 14). Vida 0 = 0.
+        int indiceSprite = Mathf.CeilToInt(vidaSegura / 8f);
+
+        // Por segurança, garante que o índice não tente buscar um sprite que não existe na lista
+        indiceSprite = Mathf.Clamp(indiceSprite, 0, lifebarSprites.Length - 1);
+
+        // Troca a imagem da barra!
+        lifebarRenderer.sprite = lifebarSprites[indiceSprite];
     }
 }
