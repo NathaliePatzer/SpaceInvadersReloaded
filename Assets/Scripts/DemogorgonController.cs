@@ -11,6 +11,9 @@ public class DemogorgonController : MonoBehaviour
     public GameObject demobatPrefab; // Preparado para os morcegos
     public GameObject wafflePowerUp; // Preparado para o drop de cura
 
+    [Range(0, 100)] // Cria uma barrinha de 0 a 100 no Inspector
+    public float waffleDropChancePercent = 5f; // Começamos com 5% de chance por tiro
+
     [Header("Movimentação (Mundo Invertido)")]
     public float teleportInterval = 8f; // Tempo que ele fica parado antes de sumir
     public float minX = -8f; // Ajuste conforme o limite esquerdo da sua câmera
@@ -183,6 +186,9 @@ public class DemogorgonController : MonoBehaviour
         // ---  Atualiza o sprite da barra de vida após tomar o tiro! ---
         UpdateLifebar();
 
+        // ---  Waffle Drop Logic ---
+        TryDropWaffle();
+
         // Se a vida zerar, ele morre
         if (currentHealth <= 0)
         {
@@ -278,5 +284,23 @@ public class DemogorgonController : MonoBehaviour
 
         // Troca a imagem da barra!
         lifebarRenderer.sprite = lifebarSprites[indiceSprite];
+    }
+
+    // Helper function to handle the drop chance
+    void TryDropWaffle()
+    {
+        // If there's no prefab assigned, do nothing to prevent errors
+        if (wafflePowerUp == null) return;
+
+        // Generate a random number between 0.0 and 100.0
+        float dropRoll = Random.Range(0f, 100f);
+
+        // If the rolled number is less than or equal to our drop chance (e.g., 5%)
+        if (dropRoll <= waffleDropChancePercent)
+        {
+            // Instantiate the Waffle at the boss's current position
+            Instantiate(wafflePowerUp, transform.position, Quaternion.identity);
+            //Debug.Log("The Demogorgon dropped a lucky Waffle!");
+        }
     }
 }
