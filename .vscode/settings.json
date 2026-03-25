@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "SpyteBoss3.sln"
+    "dotnet.defaultSolution": "SpyteBoss4.sln"
 }

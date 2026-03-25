@@ -17,6 +17,10 @@ public class WafflePowerUp : MonoBehaviour
     public float cooldownReductionAmount = 0.3f;
     // Quantos segundos o efeito do tiro rápido vai durar antes de voltar ao normal
     public float buffDuration = 5f;
+    // Referência para o sistema de partículas de poeira
+    private ParticleSystem dustParticles;
+    // Referência para o componente de rastro
+    private TrailRenderer trail;
 
     void Update()
     {
@@ -69,6 +73,20 @@ public class WafflePowerUp : MonoBehaviour
 
                 // Zera a velocidade para o Waffle parar de cair exatamente no ponto onde foi pego
                 fallSpeed = 0f;
+
+                if (dustParticles != null)
+                {
+                    // Dizemos para o sistema de partículas parar de criar novas poeiras.
+                    // As poeiras que já foram criadas continuam lá fadando suavemente.
+                    dustParticles.Stop();
+                }
+
+                // ---  Para de gerar o rastro! ---
+                if (trail != null)
+                {
+                    // Dizemos para o rastro parar de criar novos pontinhos, mas o rastro que já foi criado continua ali fadando suavemente.
+                    trail.emitting = false;
+                }
 
                 // Desativa o colisor para garantir que a nave não acione esse mesmo Waffle duas vezes num único frame
                 Collider2D col = GetComponent<Collider2D>();
