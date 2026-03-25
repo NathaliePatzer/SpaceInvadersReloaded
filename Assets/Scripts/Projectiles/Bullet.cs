@@ -65,6 +65,10 @@ public class Bullet : MonoBehaviour
         if (collision.GetComponent<InvadedTrigger>())
             return;
 
+        // ---  A bala ignora objetos com a Tag "PowerUp" ---
+        if (collision.CompareTag("PowerUp"))
+            return;
+
         IShootable shootable = collision.GetComponent<IShootable>();
         if (shootable != null)
         {

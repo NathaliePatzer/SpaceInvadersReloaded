@@ -38,6 +38,13 @@ public class DemogorgonController : MonoBehaviour
     public SpriteRenderer lifebarRenderer; // O componente que vai mostrar a barra na tela
     public Sprite[] lifebarSprites; // A lista com os seus 15 sprites
 
+    [Header("Efeitos Sonoros (SFX)")]
+    public AudioSource audioSource; // O "alto-falante" do boss
+    public AudioClip hitSound;      // Som de tomar dano
+    public AudioClip portalSound;   // Som do portal abrindo/fechando
+    public AudioClip attackSound;   // Som de cuspir morcegos
+    public AudioClip deathSound;    // Som de morte
+
     // Otimização: guardar os componentes para não procurar toda hora
     private SpriteRenderer spriteRenderer;
     private Collider2D bossCollider;
@@ -77,6 +84,11 @@ public class DemogorgonController : MonoBehaviour
         float randomX = Random.Range(minX, maxX);
         Vector3 posicaoInicial = new Vector3(randomX, fixedY, 0f);
         transform.position = posicaoInicial;
+
+        if (audioSource != null && portalSound != null)
+        {
+            audioSource.PlayOneShot(portalSound);
+        }
 
         // 2. Cria o portal de entrada nessa nova posição
         GameObject portal = Instantiate(portalPrefab, posicaoInicial, Quaternion.identity);
@@ -143,6 +155,11 @@ public class DemogorgonController : MonoBehaviour
             float randomX = Random.Range(minX, maxX);
             Vector3 novaPosicao = new Vector3(randomX, fixedY, 0f);
             transform.position = novaPosicao;
+
+            if (audioSource != null && portalSound != null)
+            {
+                audioSource.PlayOneShot(portalSound);
+            }
 
             // 3. Abre o portal na nova posição!
             GameObject portal = Instantiate(portalPrefab, novaPosicao, Quaternion.identity);
@@ -243,6 +260,12 @@ public class DemogorgonController : MonoBehaviour
 
     void ShootDemobats()
     {
+
+        if (audioSource != null && attackSound != null)
+        {
+            audioSource.PlayOneShot(attackSound);
+        }
+
         if (demobatPrefab != null)
         {
             // Instancia 3 morcegos de uma vez: um no centro, um na esquerda e um na direita!
