@@ -44,14 +44,18 @@ public class DemogorgonController : MonoBehaviour
     public AudioClip portalSound;   // Som do portal abrindo/fechando
     public AudioClip attackSound;   // Som de cuspir morcegos
     public AudioClip deathSound;    // Som de morte
+    private Animator animator; // Animator
 
     // Otimização: guardar os componentes para não procurar toda hora
     private SpriteRenderer spriteRenderer;
     private Collider2D bossCollider;
+    private bool isDeath = false;
+    private GameObject activePortal;
 
     void Awake()
     {
         // "Decora" os componentes assim que o objeto nasce
+        animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         bossCollider = GetComponent<Collider2D>();
 
@@ -91,7 +95,7 @@ public class DemogorgonController : MonoBehaviour
         }
 
         // 2. Cria o portal de entrada nessa nova posição
-        GameObject portal = Instantiate(portalPrefab, posicaoInicial, Quaternion.identity);
+        activePortal = Instantiate(portalPrefab, posicaoInicial, Quaternion.identity);
 
         // 3. Espera o portal abrir até a metade
         yield return new WaitForSeconds(portalAnimationTime / 2f);
@@ -114,7 +118,7 @@ public class DemogorgonController : MonoBehaviour
 
         // 5. Espera a outra metade da animação do portal terminar
         yield return new WaitForSeconds(portalAnimationTime / 2f);
-        Destroy(portal);
+        if (activePortal != null) Destroy(activePortal); // Destrói usando a variável
 
         // 6. Começa o ciclo normal de atacar e teleportar
         StartCoroutine(TeleportRoutine());
@@ -122,7 +126,7 @@ public class DemogorgonController : MonoBehaviour
 
     IEnumerator TeleportRoutine()
     {
-        while (currentHealth > 0)
+        while (currentHealth > 0 && !isDeath)
         {
             // Fica parado encarando o jogador pela metade do tempo...
             yield return new WaitForSeconds(teleportInterval / 2f);
@@ -162,7 +166,7 @@ public class DemogorgonController : MonoBehaviour
             }
 
             // 3. Abre o portal na nova posição!
-            GameObject portal = Instantiate(portalPrefab, novaPosicao, Quaternion.identity);
+            activePortal = Instantiate(portalPrefab, novaPosicao, Quaternion.identity);
 
             // 4. Espera METADE da animação do portal tocar
             yield return new WaitForSeconds(portalAnimationTime / 2f);
@@ -187,7 +191,7 @@ public class DemogorgonController : MonoBehaviour
             yield return new WaitForSeconds(portalAnimationTime / 2f);
 
             // 7. Destrói o portal para ele sumir da tela
-            Destroy(portal);
+            if (activePortal != null) Destroy(activePortal); // Destrói usando a variável
         }
     }
 
@@ -207,16 +211,18 @@ public class DemogorgonController : MonoBehaviour
         TryDropWaffle();
 
         // Se a vida zerar, ele morre
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && !isDeath)
         {
-            Defeated();
+            StopAllCoroutines(); // O BOTÃO DE PÂNICO: Cancela teleporte, piscar, tudo na hora!
+            StartCoroutine(DefeatedRoutine());
         }
     }
 
     // Função auxiliar para iniciar a coroutine com segurança
     void StartHitFlash()
     {
-        if (spriteRenderer == null) return;
+        // Se ele já estiver morrendo, não deixa mais piscar de dano!
+        if (spriteRenderer == null || isDeath) return;
 
         // Se o boss tomar múltiplos tiros rápidos, a gente para o piscar anterior 
         // e começa um novo do zero (para o feedback ser instantâneo)
@@ -244,17 +250,47 @@ public class DemogorgonController : MonoBehaviour
         hitFlashCoroutine = null;
     }
 
-    void Defeated()
+   IEnumerator DefeatedRoutine() 
     {
-        Debug.Log("Demogorgon Derrotado! A cidade está salva!");
+        isDeath = true; // Puxa o freio de emergência para as outras lógicas pararem
+        Debug.Log("Demogorgon Defeated!");
 
-        // Avisa o WaveManager que o Chefão caiu e o jogo foi vencido
+         if (audioSource != null && deathSound != null)
+            {
+                audioSource.PlayOneShot(deathSound);
+            }
+
+        // --- NOVO: Garante que ele não morra "pintado" de vermelho ---
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = originalColor;
+        }
+
+        // --- NOVO: Se ele morreu enquanto o portal estava abrindo, apaga o portal na hora! ---
+        if (activePortal != null)
+        {
+            Destroy(activePortal);
+        }
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Death");
+        }
+
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null) col.enabled = false;
+
+        // EM VEZ de destruir com delay, nós mandamos o próprio código esperar a animação terminar!
+        // Ajuste esse número para o tempo exato da sua animação de morte.
+        yield return new WaitForSeconds(6.15f); 
+
+        // SÓ AGORA, depois de 5 segundos tocando a animação e o som, a gente avisa o gerente que acabou.
         if (WaveManager.Instance != null)
         {
             WaveManager.Instance.OnWaveCompleted();
         }
 
-        // Destrói o corpo do Boss
+        // E por fim, sumimos com o corpo.
         Destroy(gameObject);
     }
 
@@ -281,9 +317,6 @@ public class DemogorgonController : MonoBehaviour
         // Verifica se quem bateu nele foi o laser da sua nave
         if (other.CompareTag("Bullet"))
         {
-            // 1. Destrói o tiro da nave para não atravessar o Boss
-            Destroy(other.gameObject);
-
             // 2. Chama a nossa função maravilhosa que tira vida e faz piscar!
             // (Coloquei 1 de dano, mas se o seu tiro for mais forte, pode mudar esse número)
             TakeDamage(1);

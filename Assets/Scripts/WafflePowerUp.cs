@@ -49,7 +49,7 @@ public class WafflePowerUp : MonoBehaviour
             {
                 // Chama a função da nave passando o quanto reduzir do tiro e por quanto tempo
                 playerShip.ReduceWeaponCooldown(cooldownReductionAmount, buffDuration);
-                
+
                 // Aviso no console só para termos certeza de que a matemática funcionou durante os testes
                 //Debug.Log("Waffle coletado! Cooldown da arma reduzido.");
 
@@ -57,7 +57,7 @@ public class WafflePowerUp : MonoBehaviour
 
                 // Tenta achar o componente Animator no próprio objeto do Waffle
                 Animator animator = GetComponent<Animator>();
-                
+
                 // Se não achar no objeto principal, procura caso o Animator esteja em um objeto "filho"
                 if (animator == null)
                 {

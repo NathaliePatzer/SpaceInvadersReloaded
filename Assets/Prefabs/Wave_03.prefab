@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 5639808004711579025}
   - component: {fileID: 5639808004711579029}
   - component: {fileID: 5639808004711579026}
-  - component: {fileID: 5639808004711579027}
   - component: {fileID: 5639808004711579024}
   - component: {fileID: 858257775670304746}
+  - component: {fileID: 3995321707754592199}
   m_Layer: 0
   m_Name: demogorgon
   m_TagString: Untagged
@@ -109,32 +109,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!61 &5639808004711579027
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5639808004711579038}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.56, y: 2.56}
-    newSize: {x: 2.56, y: 2.56}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2.56, y: 2.56}
-  m_EdgeRadius: 0
 --- !u!114 &5639808004711579024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,7 +124,7 @@ MonoBehaviour:
   maxHealth: 112
   demobatPrefab: {fileID: 3217200970416303107, guid: a5be81f916b0f0b4395d4c0bbfba036b, type: 3}
   wafflePowerUp: {fileID: 2610602050567458406, guid: dea71f1eb509f83468ac5a4cae0e649b, type: 3}
-  waffleDropChancePercent: 63.5
+  waffleDropChancePercent: 66.6
   teleportInterval: 6
   minX: -8
   maxX: 8
@@ -182,7 +156,7 @@ MonoBehaviour:
   hitSound: {fileID: 0}
   portalSound: {fileID: 8300000, guid: 6b1d6a530b105d443a838bd0853542d9, type: 3}
   attackSound: {fileID: 8300000, guid: 3e6d13aa8b8eb4a47b1b00c715854a1c, type: 3}
-  deathSound: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: 8cfae4af40a32cf44b4784813cf06b94, type: 3}
 --- !u!82 &858257775670304746
 AudioSource:
   m_ObjectHideFlags: 0
@@ -279,6 +253,97 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!60 &3995321707754592199
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5639808004711579038}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.56, y: 2.56}
+    newSize: {x: 2.56, y: 2.56}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.39999998, y: -1.02}
+      - {x: 0.35, y: -0.95}
+      - {x: 0.26999998, y: -0.91999996}
+      - {x: 0.37, y: -0.89}
+      - {x: 0.47, y: -0.98999995}
+      - {x: 0.77, y: -0.97999996}
+      - {x: 0.72999996, y: -0.76}
+      - {x: 0.66999996, y: -0.71}
+      - {x: 0.59, y: -0.55}
+      - {x: 0.42999998, y: -0.39}
+      - {x: 0.64, y: -0.34}
+      - {x: 0.65999997, y: -0.32}
+      - {x: 0.65999997, y: 0}
+      - {x: 0.64, y: 0.02}
+      - {x: 0.59, y: 0.089999996}
+      - {x: 0.77, y: 0.17}
+      - {x: 0.82, y: 0.31}
+      - {x: 0.82, y: 0.45}
+      - {x: 0.75, y: 0.48999998}
+      - {x: 0.64, y: 0.58}
+      - {x: 0.48, y: 0.65999997}
+      - {x: 0.39, y: 0.66999996}
+      - {x: 0.35, y: 0.72999996}
+      - {x: 0.26999998, y: 0.89}
+      - {x: 0.04, y: 1.13}
+      - {x: 0.02, y: 1.14}
+      - {x: -0.12, y: 1.14}
+      - {x: -0.25, y: 0.98999995}
+      - {x: -0.35, y: 0.89}
+      - {x: -0.45999998, y: 0.65999997}
+      - {x: -0.58, y: 0.69}
+      - {x: -0.59999996, y: 0.59}
+      - {x: -0.72999996, y: 0.59}
+      - {x: -0.9, y: 0.42}
+      - {x: -0.9, y: 0.29999998}
+      - {x: -0.76, y: 0.14}
+      - {x: -0.65999997, y: 0.099999994}
+      - {x: -0.74, y: 0}
+      - {x: -0.74, y: -0.32}
+      - {x: -0.71999997, y: -0.34}
+      - {x: -0.5, y: -0.39999998}
+      - {x: -0.58, y: -0.44}
+      - {x: -0.75, y: -0.7}
+      - {x: -0.82, y: -0.76}
+      - {x: -0.84, y: -0.96999997}
+      - {x: -0.81, y: -1.01}
+      - {x: -0.51, y: -0.96999997}
+      - {x: -0.38, y: -0.79999995}
+      - {x: -0.44, y: -1}
+      - {x: -0.51, y: -1.03}
+      - {x: -0.5, y: -1.1999999}
+      - {x: -0.48999998, y: -1.2547346}
+      - {x: 0.42, y: -1.2686284}
+      - {x: 0.42, y: -1.04}
+    - - {x: -0.37, y: -0.26999998}
+      - {x: -0.32, y: -0.26999998}
+      - {x: -0.29, y: -0.24}
+      - {x: -0.29, y: -0.19}
+      - {x: -0.26999998, y: -0.19}
+      - {x: -0.26999998, y: -0.29}
+      - {x: -0.37, y: -0.29}
+    - - {x: 0.19, y: -0.19}
+      - {x: 0.21, y: -0.24}
+      - {x: 0.24, y: -0.26999998}
+      - {x: 0.29, y: -0.29}
+      - {x: 0.19, y: -0.29}
 --- !u!1 &7165586972446592372
 GameObject:
   m_ObjectHideFlags: 0

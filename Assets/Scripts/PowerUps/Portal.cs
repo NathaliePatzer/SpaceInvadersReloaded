@@ -9,6 +9,9 @@ public class Portal : MonoBehaviour
     {
         foreach (var bullet in PoolingSystem.Instance.activeBullets)
         {
+            // --- Se a bala for nula (destruída por algum motivo), pula ela e segue o jogo! ---
+            if (bullet == null) continue;
+            
             if (bullet.gameObject.activeInHierarchy && bullet.CompareTag("AlienProjectile"))
             {
                 float distance = Vector2.Distance(bullet.transform.position, transform.position);
