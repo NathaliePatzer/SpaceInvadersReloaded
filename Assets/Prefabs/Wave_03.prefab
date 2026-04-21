@@ -157,6 +157,13 @@ MonoBehaviour:
   portalSound: {fileID: 8300000, guid: 6b1d6a530b105d443a838bd0853542d9, type: 3}
   attackSound: {fileID: 8300000, guid: 3e6d13aa8b8eb4a47b1b00c715854a1c, type: 3}
   deathSound: {fileID: 8300000, guid: 8cfae4af40a32cf44b4784813cf06b94, type: 3}
+  rupiaPrefabs:
+  - {fileID: 3624943507376498438, guid: 9ed7d96eba5a38945a60d33f7b5e1af8, type: 3}
+  - {fileID: 1114150596934395495, guid: 8c658f6ee5c75434482f21c4a5cd6870, type: 3}
+  - {fileID: 85015132420088673, guid: 9cb0c4b198dddfe429921106b377992d, type: 3}
+  quantidadeRupias: 20
+  forcaExplosaoMin: 3
+  forcaExplosaoMax: 6
 --- !u!82 &858257775670304746
 AudioSource:
   m_ObjectHideFlags: 0

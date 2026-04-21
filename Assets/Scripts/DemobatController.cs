@@ -6,6 +6,10 @@ public class DemobatController : MonoBehaviour
     public float speed = 3f; // Velocidade de queda
     public float frequency = 3f; // Quão rápido ele faz o zigue-zague
     public float magnitude = 3.5f; // Quão largo é o zigue-zague
+    // Valor da recompensa 
+    [Header("Pontuação")]
+    public int scoreValue = 25;
+    public GameObject floatingTextPrefab;
 
     private Vector3 startPosition;
     private float aliveTime;
@@ -56,7 +60,21 @@ public class DemobatController : MonoBehaviour
         }
         else if (other.CompareTag("Bullet"))
         {
-            Destroy(other.gameObject); // Destrói o laser da nave
+            // Deixa a bala se reciclar sozinha, sem destruir! 
+            // (Removemos o Destroy(other.gameObject))
+
+            // Dá os pontos para o jogador! 
+            if (ScoreSystem.Instance != null)
+            {
+                ScoreSystem.Instance.AddScore(scoreValue);
+            }
+
+            // --- NOVO: Instancia o texto flutuante na posição do morcego! ---
+            if (floatingTextPrefab != null)
+            {
+                Instantiate(floatingTextPrefab, transform.position, Quaternion.identity);
+            }
+
             Die(); // Chama a rotina de morte do morcego
         }
     }

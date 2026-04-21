@@ -46,6 +46,12 @@ public class DemogorgonController : MonoBehaviour
     public AudioClip deathSound;    // Som de morte
     private Animator animator; // Animator
 
+    [Header("Loot (Rupias)")]
+    public GameObject[] rupiaPrefabs; // Aqui você vai arrastar os 3 prefabs!
+    public int quantidadeRupias = 60;  // Quantas moedas vão voar
+    public float forcaExplosaoMin = 1f; // Força mínima do empurrão
+    public float forcaExplosaoMax = 3f; // Força máxima do empurrão
+
     // Otimização: guardar os componentes para não procurar toda hora
     private SpriteRenderer spriteRenderer;
     private Collider2D bossCollider;
@@ -250,15 +256,15 @@ public class DemogorgonController : MonoBehaviour
         hitFlashCoroutine = null;
     }
 
-   IEnumerator DefeatedRoutine() 
+    IEnumerator DefeatedRoutine()
     {
         isDeath = true; // Puxa o freio de emergência para as outras lógicas pararem
         Debug.Log("Demogorgon Defeated!");
 
-         if (audioSource != null && deathSound != null)
-            {
-                audioSource.PlayOneShot(deathSound);
-            }
+        if (audioSource != null && deathSound != null)
+        {
+            audioSource.PlayOneShot(deathSound);
+        }
 
         // --- NOVO: Garante que ele não morra "pintado" de vermelho ---
         if (spriteRenderer != null)
@@ -277,12 +283,23 @@ public class DemogorgonController : MonoBehaviour
             animator.SetTrigger("Death");
         }
 
+        // --- MUDANÇA 1: Soltar o loot no início da morte ---
+        // Isso faz com que as moedas voem enquanto o boss faz o drama da animação.
+        // Se preferir que elas saiam no meio, pode colocar um yield return de 1 ou 2 segundos antes.
+        ExplodeLoot();
+
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
         // EM VEZ de destruir com delay, nós mandamos o próprio código esperar a animação terminar!
         // Ajuste esse número para o tempo exato da sua animação de morte.
-        yield return new WaitForSeconds(6.15f); 
+        yield return new WaitForSeconds(6.00f);
+
+        // --- MUDANÇA 2: O "Tempo de Vitória" ---
+        // Adicionamos um tempo extra (ex: 4 segundos) para o player conseguir 
+        // se movimentar e pegar as rupias antes da cena trocar.
+        float tempoParaColeta = 4.0f;
+        yield return new WaitForSeconds(tempoParaColeta);
 
         // SÓ AGORA, depois de 5 segundos tocando a animação e o som, a gente avisa o gerente que acabou.
         if (WaveManager.Instance != null)
@@ -357,6 +374,37 @@ public class DemogorgonController : MonoBehaviour
             // Instantiate the Waffle at the boss's current position
             Instantiate(wafflePowerUp, transform.position, Quaternion.identity);
             //Debug.Log("The Demogorgon dropped a lucky Waffle!");
+        }
+    }
+
+    private void ExplodeLoot()
+    {
+        // Proteção: se você esquecer de colocar os prefabs no inspector, ele não dá erro
+        if (rupiaPrefabs == null || rupiaPrefabs.Length == 0) return;
+
+        for (int i = 0; i < quantidadeRupias; i++)
+        {
+            // Sorteia um dos 3 prefabs que você colocou no array
+            GameObject prefabEscolhido = rupiaPrefabs[Random.Range(0, rupiaPrefabs.Length)];
+
+            // Cria a rupia exatamente no meio do Demogorgon
+            GameObject rupia = Instantiate(prefabEscolhido, transform.position, Quaternion.identity);
+
+            // Pega a física da rupia que acabou de nascer para dar o empurrão
+            Rigidbody2D rbRupia = rupia.GetComponent<Rigidbody2D>();
+            if (rbRupia != null)
+            {
+                // Calcula um vetor em formato de "leque" apontando para cima e pros lados
+                float direcaoX = Random.Range(-1f, 1f);
+                float direcaoY = Random.Range(0.5f, 1.5f); // Sempre valores positivos em Y para subir antes de cair
+                Vector2 direcaoArcade = new Vector2(direcaoX, direcaoY).normalized;
+
+                // Sorteia a força do empurrão (algumas voam mais longe, outras caem perto)
+                float forca = Random.Range(forcaExplosaoMin, forcaExplosaoMax);
+
+                // Aplica o "chute" na rupia! ForceMode2D.Impulse é perfeito pra explosões.
+                rbRupia.AddForce(direcaoArcade * forca, ForceMode2D.Impulse);
+            }
         }
     }
 }
