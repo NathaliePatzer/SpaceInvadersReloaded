@@ -395,8 +395,8 @@ public class DemogorgonController : MonoBehaviour
             if (rbRupia != null)
             {
                 // Calcula um vetor em formato de "leque" apontando para cima e pros lados
-                float direcaoX = Random.Range(-1f, 1f);
-                float direcaoY = Random.Range(0.5f, 1.5f); // Sempre valores positivos em Y para subir antes de cair
+                float direcaoX = Random.Range(-0.5f, 1f);
+                float direcaoY = Random.Range(0.8f, 1.2f); // Sempre valores positivos em Y para subir antes de cair
                 Vector2 direcaoArcade = new Vector2(direcaoX, direcaoY).normalized;
 
                 // Sorteia a força do empurrão (algumas voam mais longe, outras caem perto)
