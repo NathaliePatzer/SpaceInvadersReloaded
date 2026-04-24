@@ -207,6 +207,13 @@ public class DemogorgonController : MonoBehaviour
         currentHealth -= damage;
         Debug.Log("Vida do Boss: " + currentHealth);
 
+        // Se entrou na metade da vida, ele fica "irritado" (ex: tom avermelhado)
+        if (currentHealth <= maxHealth / 2 && !isDeath)
+        {
+            spriteRenderer.color = new Color(0.7f, 0.3f, 1f); // Um vermelho clarinho/rosa
+            originalColor = spriteRenderer.color; // Atualiza a cor original para o hitflash não resetar o vermelho
+        }
+
         // --- Toca o efeito visual de dano! ---
         StartHitFlash();
 
@@ -321,11 +328,36 @@ public class DemogorgonController : MonoBehaviour
 
         if (demobatPrefab != null)
         {
-            // Instancia 3 morcegos de uma vez: um no centro, um na esquerda e um na direita!
-            Instantiate(demobatPrefab, transform.position, Quaternion.identity);
-            Instantiate(demobatPrefab, transform.position + new Vector3(-1f, -0.5f, 0f), Quaternion.identity);
-            Instantiate(demobatPrefab, transform.position + new Vector3(1f, -0.5f, 0f), Quaternion.identity);
+            // Verificamos se ele está com 50% de vida ou menos
+            if (currentHealth <= maxHealth / 2)
+            {
+                // --- FASE 2: Formação em U ---
+
+                // 1. Grupo Central (Base do U)
+                SpawnBatGroup(Vector3.zero);
+
+                // 2. Definimos as variáveis para o ajuste fino da formação
+                float distanciamentoLateral = 3.5f; // Quão longe pros lados
+                float alturaDoBraçoDoU = 2f;      // Quão "acima" da central (O segredo do U!)
+
+                // 3. Grupos Laterais (Braços do U)
+                SpawnBatGroup(new Vector3(-distanciamentoLateral, alturaDoBraçoDoU, 0f)); // Esquerda
+                SpawnBatGroup(new Vector3(distanciamentoLateral, alturaDoBraçoDoU, 0f));  // Direita
+            }
+            else
+            {
+                // --- FASE 1: Apenas o grupo central ---
+                SpawnBatGroup(Vector3.zero);
+            }
         }
+    }
+
+    // Criamos essa função auxiliar para não repetir código (DRY - Don't Repeat Yourself)
+    void SpawnBatGroup(Vector3 offset)
+    {
+        Instantiate(demobatPrefab, transform.position + offset, Quaternion.identity);
+        Instantiate(demobatPrefab, transform.position + offset + new Vector3(-1f, -0.5f, 0f), Quaternion.identity);
+        Instantiate(demobatPrefab, transform.position + offset + new Vector3(1f, -0.5f, 0f), Quaternion.identity);
     }
 
     // A física das colisões! O Boss sente o tiro batendo nele.
