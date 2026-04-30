@@ -239,4 +239,29 @@ public class PlayerController : MonoBehaviour, IShootable
         StartCoroutine(BlinkBeforeResetScale());
     }
 
+    // Essa é a função que a Triforce chama!
+    public void AtivarTiroTriplo()
+    {
+        // Se a nave tem uma arma equipada, manda ela ligar o poder
+        if (weapon != null)
+        {
+            weapon.LigarTiroTriplo(8f); // Passa o tempo (5 segundos) como aviso
+        }
+        
+        // Opcional: Dica visual mudando a cor da nave pra amarelinho
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = new Color(1f, 0.3f, 0.3f);
+        }
+    }
+
+    // Como o Player mudou de cor, ele mesmo se encarrega de voltar ao normal depois
+    public void DesativarEfeitoVisualTiroTriplo()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = Color.white;
+        }
+    }
+
 }

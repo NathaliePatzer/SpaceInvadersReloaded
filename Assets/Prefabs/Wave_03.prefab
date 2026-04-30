@@ -124,7 +124,7 @@ MonoBehaviour:
   maxHealth: 112
   demobatPrefab: {fileID: 3217200970416303107, guid: a5be81f916b0f0b4395d4c0bbfba036b, type: 3}
   wafflePowerUp: {fileID: 2610602050567458406, guid: dea71f1eb509f83468ac5a4cae0e649b, type: 3}
-  waffleDropChancePercent: 66.6
+  waffleDropChancePercent: 10.9
   teleportInterval: 6
   minX: -8
   maxX: 8

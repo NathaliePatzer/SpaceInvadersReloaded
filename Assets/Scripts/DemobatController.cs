@@ -11,6 +11,11 @@ public class DemobatController : MonoBehaviour
     public int scoreValue = 25;
     public GameObject floatingTextPrefab;
 
+    [Header("Drops")]
+    public GameObject triforcePrefab; // Onde você vai arrastar o prefab na Unity
+    [Range(0, 100)]
+    public float chanceDropTriforce = 10f; // 10% de chance de dropar ao morrer
+
     private Vector3 startPosition;
     private float aliveTime;
 
@@ -83,6 +88,19 @@ public class DemobatController : MonoBehaviour
     void Die()
     {
         isDead = true; // Avisa o Update para parar o movimento
+
+        // Sorteia um número de 0 a 100
+        float sorteio = Random.Range(0f, 100f);
+
+        // Se o número sorteado for menor que a chance estipulada, solta o item!
+        if (sorteio <= chanceDropTriforce)
+        {
+            // Verifica se você lembrou de colocar o prefab no Inspector para não dar erro
+            if (triforcePrefab != null)
+            {
+                Instantiate(triforcePrefab, transform.position, Quaternion.identity);
+            }
+        }
 
         // Desliga a física dele para ele virar um "fantasma" na tela
         GetComponent<Collider2D>().enabled = false;

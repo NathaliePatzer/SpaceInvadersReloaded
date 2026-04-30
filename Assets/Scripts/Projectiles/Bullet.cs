@@ -69,6 +69,10 @@ public class Bullet : MonoBehaviour
         if (collision.CompareTag("PowerUp"))
             return;
 
+        // --- O CONSERTO ESTÁ AQUI: A bala ignora outras balas! ---
+        if (collision.GetComponent<Bullet>())
+            return;
+
         IShootable shootable = collision.GetComponent<IShootable>();
         if (shootable != null)
         {

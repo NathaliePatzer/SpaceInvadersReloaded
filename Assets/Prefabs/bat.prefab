@@ -173,3 +173,5 @@ MonoBehaviour:
   magnitude: 1.5
   scoreValue: 25
   floatingTextPrefab: {fileID: 1886938693955087146, guid: 7b76b5f0bd817ec48a229aa124a80b92, type: 3}
+  triforcePrefab: {fileID: 6372021680449314981, guid: cb73523773c8e394bbe876ab66b54cb1, type: 3}
+  chanceDropTriforce: 65.7
