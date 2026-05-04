@@ -9,8 +9,8 @@ public class ExitGame : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Time.timeScale = 1; // ✅ Garante que o tempo volte ao normal
-            SceneManager.LoadScene("Menu");
+            //Time.timeScale = 1; // ✅ Garante que o tempo volte ao normal
+            //SceneManager.LoadScene("Menu");
         }
     }
 }
