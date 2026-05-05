@@ -8,6 +8,9 @@ public class PauseMenu : MonoBehaviour
 {
     // Uma flag global para outros scripts saberem se o jogo está pausado
     public static bool GameIsPaused = false;
+    // --- O CADEADO GLOBAL ---
+    // Começa verdadeiro, mas outros scripts podem desligar isso!
+    public static bool PodePausar = true;
 
     [Header("UI do Menu")]
     public GameObject pauseMenuUI; // Onde vamos arrastar o seu Panel
@@ -15,15 +18,19 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
         // Checa se o ESC foi apertado no teclado
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        // Só tenta ler o botão ESC se o cadeado estiver aberto!
+        if (PodePausar)
         {
-            if (GameIsPaused)
+            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                Resume();
-            }
-            else
-            {
-                Pause();
+                if (GameIsPaused)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
             }
         }
     }
@@ -56,6 +63,8 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         AudioListener.pause = false;
         GameIsPaused = false;
+        // Importante: destranca o pause ao voltar pro menu, pro jogo não começar trancado na próxima vez!
+        PodePausar = true;
 
         SceneManager.LoadScene("Menu"); // Tela de menu
     }

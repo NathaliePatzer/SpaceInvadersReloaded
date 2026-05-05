@@ -21,6 +21,20 @@ public class WafflePowerUp : MonoBehaviour
     private ParticleSystem dustParticles;
     // Referência para o componente de rastro
     private TrailRenderer trail;
+    // Referência para o som!
+    private AudioSource audioSource;
+    // Flag de segurança contra cliques duplos
+    private bool jaColetado = false; 
+
+    private void Awake()
+    {
+        // Puxa os componentes automaticamente assim que o Waffle nasce
+        audioSource = GetComponent<AudioSource>();
+        trail = GetComponent<TrailRenderer>();
+        
+        // Como partículas costumam ficar em objetos filhos, usamos GetComponentInChildren
+        dustParticles = GetComponentInChildren<ParticleSystem>();
+    }
 
     void Update()
     {
@@ -28,7 +42,8 @@ public class WafflePowerUp : MonoBehaviour
         transform.Translate(Vector3.down * fallSpeed * Time.deltaTime);
 
         // Verifica se o Waffle passou do limite inferior da tela
-        if (transform.position.y < lowerBoundary)
+        // Como adicionamos o 'jaColetado', garantimos que não destruímos um waffle que está tocando o som de coleta
+        if (transform.position.y < lowerBoundary && !jaColetado)
         {
             // Destrói o objeto para não pesar a memória do jogo com coisas fora da tela
             Destroy(gameObject);
@@ -38,8 +53,8 @@ public class WafflePowerUp : MonoBehaviour
     // Função chamada automaticamente pela Unity quando algo entra na área de colisão (Trigger) do Waffle
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Verifica se o objeto que encostou tem a tag "Player" (a sua nave)
-        if (other.CompareTag("Player"))
+        // Verifica se o objeto que encostou tem a tag "Player" (a sua nave) e se ainda não foi coletado
+        if (other.CompareTag("Player") && !jaColetado)
         {
             // Tenta pegar o script 'PlayerController' que está anexado à nave que colidiu
             PlayerController playerShip = other.GetComponent<PlayerController>();
@@ -47,11 +62,18 @@ public class WafflePowerUp : MonoBehaviour
             // Se encontrou o script na nave (ou seja, é realmente a nave correta), executa o efeito
             if (playerShip != null)
             {
+                jaColetado = true; // Tranca a porta! A partir de agora, não pega mais
+
                 // Chama a função da nave passando o quanto reduzir do tiro e por quanto tempo
                 playerShip.ReduceWeaponCooldown(cooldownReductionAmount, buffDuration);
 
                 // Aviso no console só para termos certeza de que a matemática funcionou durante os testes
                 //Debug.Log("Waffle coletado! Cooldown da arma reduzido.");
+                // --- LÓGICA DE ÁUDIO ---
+                if (audioSource != null)
+                {
+                    audioSource.Play();
+                }
 
                 // --- LÓGICA DE FEEDBACK VISUAL (ANIMAÇÃO E DESTRUIÇÃO) ---
 
@@ -91,6 +113,10 @@ public class WafflePowerUp : MonoBehaviour
                 // Desativa o colisor para garantir que a nave não acione esse mesmo Waffle duas vezes num único frame
                 Collider2D col = GetComponent<Collider2D>();
                 if (col != null) col.enabled = false;
+
+                // Esconde a imagem do waffle se não houver animação cuidando disso
+                SpriteRenderer sr = GetComponent<SpriteRenderer>();
+                if (sr != null && animator == null) sr.enabled = false;
 
                 // Destrói o Waffle da cena, mas aguarda o tempo definido para a animação dar tempo de tocar
                 Destroy(gameObject, destroyDelay);

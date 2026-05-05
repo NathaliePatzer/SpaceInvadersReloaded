@@ -27,6 +27,8 @@ public class GameOver : MonoBehaviour
         else
         {
             gameOvering = true;
+            // Assim que a nave morre, a gente desliga a permissão do pause
+            PauseMenu.PodePausar = false;
         }
         ScoreSystem.Instance.SaveHiScore();
         Debug.Log("Game over");
@@ -41,6 +43,8 @@ public class GameOver : MonoBehaviour
         Debug.Log("Recarregando");
         yield return SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
         Time.timeScale = 1;
+        // A cena reiniciou e o jogador está vivo, então ele pode pausar de novo!
+        PauseMenu.PodePausar = true;
         gameOverText = GameObject.Find("Canvas/GameOvertxt").GetComponent<Text>();
         gameOvering = false;
         Instance = this;

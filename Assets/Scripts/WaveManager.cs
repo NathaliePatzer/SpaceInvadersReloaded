@@ -27,7 +27,10 @@ public class WaveManager : MonoBehaviour
 
     public IEnumerator StartWaveRoutine()
     {
-        // 1. Mostra o texto da Wave
+        // Tranca o pause SEMPRE no começo da transição, antes de tudo!
+        PauseMenu.PodePausar = false;
+
+        // 1. Mostra o texto da Wave (se houver) e faz a pausa dramática de 3 segundos
         if (waveText != null)
         {
             waveText.text = "Wave " + (currentWaveIndex + 1);
@@ -47,6 +50,9 @@ public class WaveManager : MonoBehaviour
         {
             BGMController.Instance.PlayNewTrack(waveMusics[currentWaveIndex]);
         }
+
+        // 5. Finalmente, com os inimigos prontos e a música tocando, destranca o pause!
+        PauseMenu.PodePausar = true;
     }
 
     public void OnWaveCompleted()
