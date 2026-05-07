@@ -13,6 +13,7 @@ public class Weapon : MonoBehaviour
     float lastShot;
     IShootable shootable;
     AudioSource audioSource;
+    private float cooldownPadrao;
 
     [Header("Power-Ups")]
     public bool temTiroTriplo = false;
@@ -22,6 +23,8 @@ public class Weapon : MonoBehaviour
     {
         shootable = GetComponentInParent<IShootable>();
         audioSource = GetComponent<AudioSource>();
+        // --- SALVA O VALOR ORIGINAL NO MOMENTO DO START ---
+        cooldownPadrao = cooldown;
     }
     public void ShootBullet()
     {
@@ -125,6 +128,21 @@ public class Weapon : MonoBehaviour
         // Avisa o Player para tirar o efeito visual amarelinho (opcional)
         PlayerController player = GetComponentInParent<PlayerController>();
         if (player != null) player.DesativarEfeitoVisualTiroTriplo();
+    }
+
+    // --- O BOTÃO DE PÂNICO DA ARMA ---
+    public void ResetarTodosOsPowerUps()
+    {
+        // 1. Desliga o Tiro Triplo
+        if (rotinaTiroTriplo != null)
+        {
+            StopCoroutine(rotinaTiroTriplo);
+            rotinaTiroTriplo = null;
+        }
+        temTiroTriplo = false;
+
+        // 2. Reseta o cooldown para a velocidade normal
+        cooldown = cooldownPadrao;
     }
 
 }

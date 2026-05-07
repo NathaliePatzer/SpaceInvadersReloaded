@@ -733,7 +733,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.40750003, y: 0.19089493}
   m_AnchorMax: {x: 0.59624994, y: 0.33977628}
-  m_AnchoredPosition: {x: -0.04160309, y: 0.42791748}
+  m_AnchoredPosition: {x: -0.04159546, y: 0.42791748}
   m_SizeDelta: {x: 0.08329964, y: -3.1443005}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &432084338
@@ -1675,9 +1675,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wavePrefabs:
-  - {fileID: 8115644353458991083, guid: a4ac27b482eb936429f0affebcf420dd, type: 3}
+  - {fileID: 8999502839644509492, guid: cb870b5210c76724d830979ddc7400a0, type: 3}
+  - {fileID: 5091044523121891460, guid: 4da532c884e91b94cb2fbd1402ccc165, type: 3}
   - {fileID: 6023491495992888228, guid: bf5f13b118e398a44873a43500e3057b, type: 3}
   waveMusics:
+  - {fileID: 8300000, guid: f6b79e4e7da6e484aa7db74ebaf19f02, type: 3}
   - {fileID: 8300000, guid: 655fa08635efa4f448394edcfdee0ffc, type: 3}
   - {fileID: 8300000, guid: f6b79e4e7da6e484aa7db74ebaf19f02, type: 3}
   currentWaveIndex: 0

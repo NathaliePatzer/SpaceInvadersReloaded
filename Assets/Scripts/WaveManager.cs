@@ -27,31 +27,63 @@ public class WaveManager : MonoBehaviour
 
     public IEnumerator StartWaveRoutine()
     {
-        // Tranca o pause SEMPRE no começo da transição, antes de tudo!
+        // 1. Tranca o pause na transição
         PauseMenu.PodePausar = false;
 
-        // 1. Mostra o texto da Wave (se houver) e faz a pausa dramática de 3 segundos
-        if (waveText != null)
+        // --- A GRANDE SACADA ---
+        // Verifica se o índice atual é exatamente o do último prefab da lista
+        bool isBossWave = (currentWaveIndex == wavePrefabs.Length - 1);
+
+        // Se for a wave do Boss (o Demogorgon chegou!), apertamos o botão de pânico!
+        if (isBossWave)
         {
-            waveText.text = "Wave " + (currentWaveIndex + 1);
-            waveText.gameObject.SetActive(true);
-            yield return new WaitForSeconds(3f); // Tempo que o texto fica na tela
-            waveText.gameObject.SetActive(false);
+            PlayerController player = FindObjectOfType<PlayerController>();
+            if (player != null)
+            {
+                player.LimparTodosOsBuffs(); // Faxina completa antes da luta!
+            }
         }
 
-        // 2. Instancia o prefab da wave atual
+        // 2. Mostra o texto da transição
+        if (waveText != null)
+        {
+            if (isBossWave)
+            {
+                // Bônus: Muda o texto para avisar do Boss!
+                waveText.text = "Final fight";
+                waveText.color = Color.red; // (Opcional) Pinta de vermelho pra dar tensão
+            }
+            else
+            {
+                // Texto normal para waves normais
+                waveText.text = "Wave " + (currentWaveIndex + 1);
+            }
+
+            waveText.gameObject.SetActive(true);
+        }
+
+        // Pausa dramática
+        yield return new WaitForSeconds(3f);
+
+        if (waveText != null)
+        {
+            waveText.gameObject.SetActive(false);
+            waveText.color = Color.white; // Garante que a cor volte ao normal no futuro
+        }
+
+        // 3. Instancia o prefab (seja wave normal ou a wave sem aliens do boss)
         GameObject currentWavePrefab = wavePrefabs[currentWaveIndex];
 
-        // 3. Manda o AlienController assumir o controle!
+        // 4. Manda o AlienController assumir o controle!
         AlienController.Instance.InitializeWave(currentWavePrefab);
 
-        //4 . Chamar o BGM
+        // 5. Chamar o BGM
         if (currentWaveIndex < waveMusics.Length && waveMusics[currentWaveIndex] != null)
         {
             BGMController.Instance.PlayNewTrack(waveMusics[currentWaveIndex]);
         }
 
-        // 5. Finalmente, com os inimigos prontos e a música tocando, destranca o pause!
+        // 6. Destranca o pause
         PauseMenu.PodePausar = true;
     }
 
@@ -61,14 +93,14 @@ public class WaveManager : MonoBehaviour
 
         if (currentWaveIndex < wavePrefabs.Length)
         {
-            // Tem mais waves! Chama a próxima.
+            // Tem mais waves! (Pode ser normal ou a do Boss, o StartWaveRoutine resolve)
             StartCoroutine(StartWaveRoutine());
         }
         else
         {
-            // Acabaram as waves! Aqui você vai colocar o Boss no futuro.
-            // Por enquanto, vamos dar um Game Over de vitória.
-            Debug.Log("Todas as waves concluídas!");
+            // Acabaram TODAS as waves do array (o Boss foi derrotado!)
+            // Aqui entra a sua tela de Game Over / Vitória
+            Debug.Log("Todas as waves concluídas! Você venceu o jogo!");
             GameOver.Instance.OnGameOver(2000);
         }
     }

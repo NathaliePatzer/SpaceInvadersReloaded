@@ -247,7 +247,7 @@ public class PlayerController : MonoBehaviour, IShootable
         {
             weapon.LigarTiroTriplo(8f); // Passa o tempo (5 segundos) como aviso
         }
-        
+
         // Opcional: Dica visual mudando a cor da nave pra amarelinho
         if (spriteRenderer != null)
         {
@@ -262,6 +262,69 @@ public class PlayerController : MonoBehaviour, IShootable
         {
             spriteRenderer.color = Color.white;
         }
+    }
+
+    // --- O BOTÃO DE PÂNICO: PREPARAÇÃO PARA O BOSS ---
+    public void LimparTodosOsBuffs()
+    {
+        // 1. FAXINA DA ARMA (Tiro Triplo)
+        if (weapon != null)
+        {
+            weapon.ResetarTodosOsPowerUps();
+        }
+
+        // 1.1 Limpa o Fire Rate (Waffle e StarFruit)
+        if (cooldownRoutine != null)
+        {
+            StopCoroutine(cooldownRoutine);
+            if (weapon != null) weapon.cooldown = originalCooldown;
+            cooldownRoutine = null;
+        }
+
+        // 1.2 Limpa o visual do Tiro Triplo
+        DesativarEfeitoVisualTiroTriplo();
+
+        // 2. FAXINA DA VIDA ESPECIAL
+        if (hasSpecialLife)
+        {
+            hasSpecialLife = false;
+
+            if (specialLifeRoutine != null)
+            {
+                StopCoroutine(specialLifeRoutine);
+                specialLifeRoutine = null;
+            }
+
+            GameObject heart = GameObject.FindWithTag("SpecialHeart");
+            if (heart != null)
+            {
+                Animator heartAnimator = heart.GetComponent<Animator>();
+                if (heartAnimator != null)
+                {
+                    HeartStatus heartStatus = heart.GetComponent<HeartStatus>();
+                    if (heartStatus != null)
+                    {
+                        heartStatus.TriggerDisappear();
+                        StartCoroutine(DestroyAfterAnimation(heartAnimator, 1f));
+                    }
+                }
+            }
+            transform.localScale = originalScale;
+        }
+
+        // 3. FAXINA DO PORTAL DO END
+        GameObject portal = GameObject.FindWithTag("Portal");
+        if (portal != null)
+        {
+            PortalController portalController = portal.GetComponent<PortalController>();
+            // Se o portal existe e ainda não está sumindo...
+            if (portalController != null && !portalController.IsDisappearing())
+            {
+                // Zeramos o tempo dele! Isso faz ele tocar a animação de saída sozinho.
+                portalController.StartPortal(0f);
+            }
+        }
+
     }
 
 }
