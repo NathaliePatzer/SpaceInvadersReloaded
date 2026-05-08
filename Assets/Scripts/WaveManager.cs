@@ -101,7 +101,32 @@ public class WaveManager : MonoBehaviour
             // Acabaram TODAS as waves do array (o Boss foi derrotado!)
             // Aqui entra a sua tela de Game Over / Vitória
             Debug.Log("Todas as waves concluídas! Você venceu o jogo!");
-            GameOver.Instance.OnGameOver(2000);
+            WinGame();
         }
+    }
+
+    public async void WinGame()
+    {
+        Debug.Log("O Boss caiu! Vitória!");
+
+        // 1. Tranca o pause (regra de ouro de QA!)
+        PauseMenu.PodePausar = false;
+
+        // 2. Mostra o texto de VICTORY na tela
+        if (waveText != null)
+        {
+            waveText.text = "Victory!";
+            waveText.color = Color.yellow; // Cor de ouro!
+            waveText.gameObject.SetActive(true);
+        }
+
+        // 3. Espera 3 segundos para o jogador comemorar
+        await System.Threading.Tasks.Task.Delay(5000);
+
+        // 4. Salva o Score final antes de ir pros créditos
+        ScoreSystem.Instance.SaveHiScore();
+
+        // 5. Carrega a cena dos créditos
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
     }
 }
