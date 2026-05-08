@@ -127,6 +127,6 @@ public class WaveManager : MonoBehaviour
         ScoreSystem.Instance.SaveHiScore();
 
         // 5. Carrega a cena dos créditos
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("WinScreen");
     }
 }

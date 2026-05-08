@@ -32,10 +32,13 @@ public class ScoreSystem : MonoBehaviour
             PlayerPrefs.SetInt(HighScoreKey, scorePoints);
         }
 
+        // Salva a pontuação desta rodada no HD com uma chave diferente!
+        PlayerPrefs.SetInt("LastScore", scorePoints);
+
     }
     void LoadHiScore()
     {
-       hiscore.text = "" + PlayerPrefs.GetInt(HighScoreKey);
+        hiscore.text = "" + PlayerPrefs.GetInt(HighScoreKey);
     }
     [ContextMenu("Test clear")]
     void ClearHiScore()
