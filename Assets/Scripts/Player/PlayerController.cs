@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour, IShootable
     private Vector3 originalScale;
     private bool isInvincibleFlag = false;
 
+    [Header("Efeitos Visuais")]
+    public ParticleSystem particulasFogoRapido; // Arraste o Particle System recém-criado para cá no Inspector
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -150,6 +153,9 @@ public class PlayerController : MonoBehaviour, IShootable
         {
             StopCoroutine(cooldownRoutine);
             weapon.cooldown = originalCooldown;
+
+            // Corta as partículas se o jogador pegar outro power-up em cima da hora
+            if (particulasFogoRapido != null) particulasFogoRapido.Stop();
         }
 
         originalCooldown = weapon.cooldown;
@@ -159,8 +165,17 @@ public class PlayerController : MonoBehaviour, IShootable
     IEnumerator ApplyTemporaryCooldown(float amount, float duration)
     {
         weapon.cooldown = Mathf.Max(0.1f, weapon.cooldown - amount);
+
+        // Acende os motores! (Liga as partículas)
+        if (particulasFogoRapido != null) particulasFogoRapido.Play();
+
         yield return new WaitForSeconds(duration);
+
         weapon.cooldown = originalCooldown;
+
+        // Desliga a emissão quando o tempo acabar
+        if (particulasFogoRapido != null) particulasFogoRapido.Stop();
+
         cooldownRoutine = null;
     }
 
@@ -279,6 +294,16 @@ public class PlayerController : MonoBehaviour, IShootable
             StopCoroutine(cooldownRoutine);
             if (weapon != null) weapon.cooldown = originalCooldown;
             cooldownRoutine = null;
+        }
+
+        // <-- A FAXINA DAS PARTÍCULAS -->
+        if (particulasFogoRapido != null)
+        {
+            particulasFogoRapido.Stop(); // Para de emitir novas faíscas
+            
+            // DICA: Se você quiser que as faíscas que já estão na tela sumam instantaneamente 
+            // (já que é uma transição de tela para o Boss), você pode usar o comando Clear() também:
+            particulasFogoRapido.Clear(); 
         }
 
         // 1.2 Limpa o visual do Tiro Triplo

@@ -46,6 +46,9 @@ public class BGMController : MonoBehaviour
         audioSource.Stop();
         audioSource.clip = newClip;
         audioSource.pitch = originalPitch; // 2. Reseta o player de áudio
+
+        // Regrinha de ouro que garante o loop
+        audioSource.loop = true;
         
         // 3. Reseta o Mixer para tirar o efeito da wave anterior
         if (audioSource.outputAudioMixerGroup != null)
