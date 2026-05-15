@@ -4,6 +4,7 @@ using UnityEngine.Video;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.EventSystems;
 
 public class VictorySceneController : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class VictorySceneController : MonoBehaviour
     public GameObject menuFinal;
 
     [Header("Easter Egg")]
-    public GameObject babyYoda; // <-- 1. Criamos a variável para receber a sua pixel art!
+    public GameObject babyYoda; // <-- Criamos a variável para receber a sua pixel art!
 
     [Header("Textos")]
     public TextMeshProUGUI textoHighScore;
@@ -24,7 +25,11 @@ public class VictorySceneController : MonoBehaviour
     public float tempoDeFade = 2f;
 
     [Header("Áudio")]
-    public AudioSource musicaEstrelas; 
+    public AudioSource musicaEstrelas;
+
+    [Header("Navegação do Controle")]
+    public GameObject botaoInicial; // Arraste o seu botão "Menu Principal" aqui!
+    private bool menuAtivo = false; // Flag para saber quando o mouse pode roubar o foco
 
     void Start()
     {
@@ -46,6 +51,19 @@ public class VictorySceneController : MonoBehaviour
 
         telaDoVideo.gameObject.SetActive(true);
         vPlayer.loopPointReached += AoTerminarVideo;
+    }
+
+    void Update()
+    {
+        // --- A TRAVA DE SEGURANÇA CONTRA O MOUSE ---
+        // Só vigia o foco SE o vídeo já acabou e o menu está 100% visível
+        if (menuAtivo && EventSystem.current != null)
+        {
+            if (EventSystem.current.currentSelectedGameObject == null)
+            {
+                EventSystem.current.SetSelectedGameObject(botaoInicial);
+            }
+        }
     }
 
     void AoTerminarVideo(VideoPlayer vp)
@@ -94,6 +112,17 @@ public class VictorySceneController : MonoBehaviour
         grupoDoMenu.alpha = 1f;
         grupoDoMenu.interactable = true;
         grupoDoMenu.blocksRaycasts = true;
+
+        // O MOMENTO EXATO DE PUXAR O FOCO!
+        // O menu terminou de aparecer e ficou clicável, então já selecionamos o botão inicial
+        if (botaoInicial != null && EventSystem.current != null)
+        {
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(botaoInicial);
+        }
+
+        // Libera a trava do Update para começar a vigiar o mouse
+        menuAtivo = true;
     }
 
     public void VoltarAoMenu()

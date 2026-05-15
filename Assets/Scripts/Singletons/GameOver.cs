@@ -12,9 +12,14 @@ public class GameOver : MonoBehaviour
     bool gameOvering;
     void Awake()
     {
-        if (Instance != null)
+        // 1. Se já existe uma Instância e não sou eu, me destruo e PARO de ler o código!
+        if (Instance != null && Instance != this)
+        {
             Destroy(this.gameObject);
+            return; // <-- A palavra mágica que resolve o erro do fantasma!
+        }
 
+        // 2. Se eu sou o primeiro a nascer, assumo o trono e não morro mais.
         Instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
@@ -47,6 +52,5 @@ public class GameOver : MonoBehaviour
         PauseMenu.PodePausar = true;
         gameOverText = GameObject.Find("Canvas/GameOvertxt").GetComponent<Text>();
         gameOvering = false;
-        Instance = this;
     }
 }

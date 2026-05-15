@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement; // Necessário para trocar de cena
 using UnityEngine.InputSystem; // O pacote do seu Input System!
+using UnityEngine.EventSystems;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -15,13 +16,23 @@ public class PauseMenu : MonoBehaviour
     [Header("UI do Menu")]
     public GameObject pauseMenuUI; // Onde vamos arrastar o seu Panel
 
+    [Header("Navegação do Controle")]
+    public GameObject botaoInicial;
+
     void Update()
     {
         // Checa se o ESC foi apertado no teclado
         // Só tenta ler o botão ESC se o cadeado estiver aberto!
         if (PodePausar)
         {
-            if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+            // 1. Checa se o ESC foi apertado no teclado
+            bool pausouNoTeclado = Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame;
+
+            // 2. Checa se o botão X (Button West) foi apertado no controle (Gamepad)
+            bool pausouNoControle = Gamepad.current != null && Gamepad.current.buttonWest.wasPressedThisFrame;
+
+            // Se apertou em QUALQUER um dos dois, roda a lógica de pause!
+            if (pausouNoTeclado || pausouNoControle)
             {
                 if (GameIsPaused)
                 {
@@ -31,6 +42,15 @@ public class PauseMenu : MonoBehaviour
                 {
                     Pause();
                 }
+            }
+        }
+        if (GameIsPaused)
+        {
+            // Se a Unity perdeu a referência (foco = null) porque alguém mexeu o mouse...
+            if (EventSystem.current.currentSelectedGameObject == null)
+            {
+                // ...nós devolvemos o foco para o botão inicial na marra!
+                EventSystem.current.SetSelectedGameObject(botaoInicial);
             }
         }
     }
@@ -53,6 +73,10 @@ public class PauseMenu : MonoBehaviour
 
         // Dica de QA: Pausa o som para não ficar tocando música de tensão com o jogo parado
         AudioListener.pause = true;
+
+        // Quando pausar, já garante que o botão inicial seja selecionado pro controle funcionar de cara
+        EventSystem.current.SetSelectedGameObject(null); // Limpa qualquer lixo
+        EventSystem.current.SetSelectedGameObject(botaoInicial);
     }
 
     // Função para o botão "Menu Principal" (se tiver um)
