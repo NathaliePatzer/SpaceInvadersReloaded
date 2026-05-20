@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "SpyteWinAfter8BitControleAfter.sln"
+    "dotnet.defaultSolution": "SpyteWinAfter8BitControleAfterPreparing.sln"
 }

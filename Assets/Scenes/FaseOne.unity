@@ -6498,7 +6498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wavePrefabs:
-  - {fileID: 6023491495992888228, guid: bf5f13b118e398a44873a43500e3057b, type: 3}
+  - {fileID: 936369498049557629, guid: 4f9440dead7b4864e806d10a1fb552f7, type: 3}
   - {fileID: 5091044523121891460, guid: 4da532c884e91b94cb2fbd1402ccc165, type: 3}
   waveMusics:
   - {fileID: 8300000, guid: 2d90193bb002e5c43aafb167907a1a0d, type: 3}
