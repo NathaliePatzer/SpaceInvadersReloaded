@@ -116,6 +116,32 @@ public class PlayerController : MonoBehaviour, IShootable
             GameOver.Instance.OnGameOver(2000);
     }
 
+    public bool TentarRecuperarVida()
+    {
+        // Só recupera se o jogador tiver menos de 3 vidas
+        if (lives < 3)
+        {
+            lives++;
+
+            // 1. Atualiza os corações na tela
+            if (LivesHearts.Instance != null)
+            {
+                LivesHearts.Instance.UpdateHearts(lives);
+            }
+
+            Debug.Log("Vida recuperada! Vidas atuais: " + lives);
+            return true; //Avisa a maçã "Eu precisei da cura"
+
+        }
+        else
+        {
+            // Opcional: só para você ver no console que o limite funcionou, 
+            // mesmo a maçã sumindo da tela
+            Debug.Log("Vida já estava cheia. Maçã consumida sem efeito.");
+            return false; // Avisa a maçã: "Tô cheio de vida, me dá os pontos!"
+        }
+    }
+
     private IEnumerator DestroyAfterAnimation(Animator animator, float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -141,7 +167,7 @@ public class PlayerController : MonoBehaviour, IShootable
         Debug.Log("No collider ON");
         coll.enabled = false;
         speed = 0;
-        yield return new WaitForSeconds(1.1f);
+        yield return new WaitForSeconds(1.2f);
         coll.enabled = true;
         speed = _speed;
         Debug.Log("No collider OFF");
@@ -300,10 +326,10 @@ public class PlayerController : MonoBehaviour, IShootable
         if (particulasFogoRapido != null)
         {
             particulasFogoRapido.Stop(); // Para de emitir novas faíscas
-            
+
             // DICA: Se você quiser que as faíscas que já estão na tela sumam instantaneamente 
             // (já que é uma transição de tela para o Boss), você pode usar o comando Clear() também:
-            particulasFogoRapido.Clear(); 
+            particulasFogoRapido.Clear();
         }
 
         // 1.2 Limpa o visual do Tiro Triplo

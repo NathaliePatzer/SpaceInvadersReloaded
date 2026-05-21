@@ -8,8 +8,10 @@ public class AlienController : MonoBehaviour
 {
     [SerializeField] private GameObject fireRatePowerUpPrefab;
     [SerializeField] private GameObject portalPowerUpPrefab;
-    [SerializeField] private float dropChance = 0.1f;
-    [SerializeField] private float portalDropChance = 0.5f;
+    [SerializeField] private GameObject goldenApplePowerUpPrefab;
+    [SerializeField] private float dropChance = 0.1f; //10%
+    [SerializeField] private float portalDropChance = 0.5f; //50%
+    [SerializeField] private float appleDropChance = 0.05f; //5%
 
     public static AlienController Instance;
     public float alienSpeed = 0.1f;
@@ -87,11 +89,23 @@ public class AlienController : MonoBehaviour
 
     public void TryDropPowerUp(Vector3 position)
     {
-        float roll = Random.value;
+        float roll = Random.value; // Rola um número de 0.00 até 1.00
+
+        // Verifica os drops empilhando as porcentagens
         if (roll < dropChance)
+        {
             Instantiate(fireRatePowerUpPrefab, position, Quaternion.identity);
+        }
         else if (roll < dropChance + portalDropChance)
+        {
             Instantiate(portalPowerUpPrefab, position, Quaternion.identity);
+        }
+        else if (roll < dropChance + portalDropChance + appleDropChance)
+        {
+            // Dropa a Maçã Dourada se o dado cair na fatia dela!
+            if (goldenApplePowerUpPrefab != null)
+                Instantiate(goldenApplePowerUpPrefab, position, Quaternion.identity);
+        }
     }
 
     public void OnAlienDeath(Vector2Int matrixPos)

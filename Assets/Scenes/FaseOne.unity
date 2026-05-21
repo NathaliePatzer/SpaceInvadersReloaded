@@ -6103,8 +6103,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireRatePowerUpPrefab: {fileID: 558804197423631497, guid: 66112d264be0d4847849356fc25c5173, type: 3}
   portalPowerUpPrefab: {fileID: 5443297584497750029, guid: 7c6e6b4f41c771546a736968826f54ac, type: 3}
+  goldenApplePowerUpPrefab: {fileID: 4237438801013812026, guid: a2a9e6ba556fb32468f825f7625bb0a3, type: 3}
   dropChance: 0.1
   portalDropChance: 0.1
+  appleDropChance: 0.05
   alienSpeed: 0.3
   movementDelay: 0.2
   specialAlienPrefab: {fileID: 8628349193566762656, guid: a72fc2a5cb2bbbb4180cee0975b4e60c, type: 3}
@@ -6498,11 +6500,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wavePrefabs:
-  - {fileID: 936369498049557629, guid: 4f9440dead7b4864e806d10a1fb552f7, type: 3}
+  - {fileID: 7729077668614923750, guid: 0b63ef876f2f800459598a11f16bf004, type: 3}
+  - {fileID: 6023491495992888228, guid: bf5f13b118e398a44873a43500e3057b, type: 3}
+  - {fileID: 8999502839644509492, guid: cb870b5210c76724d830979ddc7400a0, type: 3}
   - {fileID: 5091044523121891460, guid: 4da532c884e91b94cb2fbd1402ccc165, type: 3}
+  - {fileID: 936369498049557629, guid: 4f9440dead7b4864e806d10a1fb552f7, type: 3}
+  - {fileID: 8115644353458991083, guid: a4ac27b482eb936429f0affebcf420dd, type: 3}
   waveMusics:
   - {fileID: 8300000, guid: 2d90193bb002e5c43aafb167907a1a0d, type: 3}
-  - {fileID: 8300000, guid: 080081145a06bc64983d97e12341ee66, type: 3}
+  - {fileID: 8300000, guid: 48e1916524412e34e9ad35c0d4d6c66d, type: 3}
+  - {fileID: 8300000, guid: 0e08ce760deefc14d9e69d00b82ca6e9, type: 3}
+  - {fileID: 8300000, guid: dec1786244e7d104b869b85d4a163c3d, type: 3}
+  - {fileID: 8300000, guid: 6036dd69730ebc441b1ec56a5890013a, type: 3}
+  - {fileID: 8300000, guid: 0f295d1d1231b31458de5aa3b7da0f77, type: 3}
   currentWaveIndex: 0
   waveText: {fileID: 2058780657}
 --- !u!4 &1486944394
