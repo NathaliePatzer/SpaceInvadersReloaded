@@ -6,16 +6,19 @@ using Random = UnityEngine.Random;
 
 public class AlienController : MonoBehaviour
 {
+    [Header("Power-Ups Prefabs")]
     [SerializeField] private GameObject fireRatePowerUpPrefab;
     [SerializeField] private GameObject portalPowerUpPrefab;
-    [SerializeField] private GameObject goldenApplePowerUpPrefab;
-    [SerializeField] private float dropChance = 0.1f; //10%
-    [SerializeField] private float portalDropChance = 0.5f; //50%
-    [SerializeField] private float appleDropChance = 0.05f; //5%
+    [SerializeField] private GameObject goldenApplePowerUpPrefab; 
+
+    [Header("Chances de Drop (0.0 a 1.0)")]
+    [SerializeField] private float dropChance = 0.07f; // 7% FireRate
+    [SerializeField] private float portalDropChance = 0.1f; // 10% Portal
+    [SerializeField] private float appleDropChance = 0.03f; // 3% GoldenApple
 
     public static AlienController Instance;
-    public float alienSpeed = 0.1f;
-    public float movementDelay = 0.1f;
+    public float alienSpeed = 0.3f;
+    public float movementDelay = 0.2f;
 
     private float originalMovementDelay; // Para resetar a cada fase
 

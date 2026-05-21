@@ -42,7 +42,8 @@ public class ExtraLifePowerUp : MonoBehaviour
                 {
                     if (existingHeart == null)
                     {
-                        StartCoroutine(SpawnHeartWithEffect());
+                        // 1. Passamos o "player" como parâmetro aqui!
+                        StartCoroutine(SpawnHeartWithEffect(player)); 
                     }
                     else
                     {
@@ -50,7 +51,8 @@ public class ExtraLifePowerUp : MonoBehaviour
                         if (heartStatus != null && heartStatus.IsDisappearing)
                         {
                             Destroy(existingHeart);
-                            StartCoroutine(SpawnHeartWithEffect());
+                            // Passamos o "player" como parâmetro aqui também!
+                            StartCoroutine(SpawnHeartWithEffect(player));
                         }
                     }
                 }
@@ -77,7 +79,8 @@ public class ExtraLifePowerUp : MonoBehaviour
         }
     }
 
-    private IEnumerator SpawnHeartWithEffect()
+    // 2. Mudamos a assinatura para exigir o Player
+    private IEnumerator SpawnHeartWithEffect(PlayerController player)
     {
         if (heartSpawnEffectPrefab != null)
         {
@@ -85,9 +88,19 @@ public class ExtraLifePowerUp : MonoBehaviour
             Destroy(effect, 1f);
         }
 
+        // Espera o tempo dramático...
         yield return new WaitForSeconds(0.9f);
 
-        Instantiate(specialHeartPrefab, heartSpawnPosition, Quaternion.identity);
+        // --- A BARREIRA DE QA ---
+        // Verifica se o player ainda existe na memória E se ele AINDA tem o buff!
+        if (player != null && player.PossuiVidaEspecial())
+        {
+            Instantiate(specialHeartPrefab, heartSpawnPosition, Quaternion.identity);
+        }
+        else
+        {
+            Debug.Log("Cogumelo abortou o spawn do coração porque o jogador tomou dano muito rápido!");
+        }
     }
 
     private IEnumerator DestroyAfterFade()
@@ -101,6 +114,4 @@ public class ExtraLifePowerUp : MonoBehaviour
         yield return new WaitForSeconds(time);
         audioSource.Stop();
     }
-
-    
 }

@@ -38,7 +38,7 @@ public class GoldenApplePowerUp : MonoBehaviour
                 else
                 {
                     // Deu false! A vida já estava cheia. 
-                    Debug.Log("Vida cheia! Convertendo maçã em 500 pontos!");
+                    //Debug.Log("Vida cheia! Convertendo maçã em 500 pontos!");
 
                     // Adiciona os pontos (Ajuste o nome do seu método AddScore se for diferente!)
                     if (ScoreSystem.Instance != null)

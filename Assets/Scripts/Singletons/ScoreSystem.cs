@@ -12,6 +12,13 @@ public class ScoreSystem : MonoBehaviour
     public static ScoreSystem Instance;
     void Awake()
     {
+        // O Cadeado de Segurança contra Impostores!
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("⚠️ ATENÇÃO: Detectamos um ScoreSystem duplicado na cena! Destruindo o impostor.");
+            Destroy(this.gameObject);
+            return;
+        }
         Instance = this;
     }
     void Start()
@@ -21,7 +28,16 @@ public class ScoreSystem : MonoBehaviour
     public void AddScore(int points)
     {
         scorePoints += points;
-        score.text = "" + scorePoints;
+        
+        if (score != null)
+        {
+            score.text = "" + scorePoints;
+            Debug.Log($"<color=cyan>[SCORE SYSTEM]</color> Sucesso! Recebi +{points} pontos. Placar atualizado na tela para: {score.text}");
+        }
+        else
+        {
+            Debug.LogError("<color=red>[SCORE SYSTEM]</color> SOCORRO! Recebi os pontos, mas a variável 'score' (o Texto da UI) está vazia no Inspector!");
+        }
     }
     [ContextMenu("Test save")]
     public void SaveHiScore()

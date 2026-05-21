@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -8575071061434368988}
   m_Layer: 0
   m_Name: cogumelinho
-  m_TagString: Untagged
+  m_TagString: PowerUp
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,10 +160,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   specialHeartPrefab: {fileID: 4571394232970344540, guid: 50ce9c675e3d591458498b38801692bd, type: 3}
+  heartSpawnEffectPrefab: {fileID: 2376194811342687200, guid: 8ab6acef0c433d44d8f7bb2258579133, type: 3}
   effectDuration: 15
   enlargedScale: {x: 1.5, y: 1.5, z: 1}
   heartSpawnPosition: {x: 0, y: 4.62, z: 0}
-  heartSpawnEffectPrefab: {fileID: 2376194811342687200, guid: 8ab6acef0c433d44d8f7bb2258579133, type: 3}
 --- !u!82 &-8575071061434368988
 AudioSource:
   m_ObjectHideFlags: 0

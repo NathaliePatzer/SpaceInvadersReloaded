@@ -66,6 +66,11 @@ public class PlayerController : MonoBehaviour, IShootable
         TakeDamage(); // Chama a nossa nova função central de dano!
     }
 
+    public bool PossuiVidaEspecial()
+    {
+        return hasSpecialLife;
+    }
+
     // NOVA FUNÇÃO: Faz exatamente tudo o que você já tinha programado!
     public void TakeDamage()
     {
@@ -164,13 +169,13 @@ public class PlayerController : MonoBehaviour, IShootable
     }
     public IEnumerator NoCollider()
     {
-        Debug.Log("No collider ON");
+        //Debug.Log("No collider ON");
         coll.enabled = false;
         speed = 0;
         yield return new WaitForSeconds(1.2f);
         coll.enabled = true;
         speed = _speed;
-        Debug.Log("No collider OFF");
+        //Debug.Log("No collider OFF");
     }
 
     public void ReduceWeaponCooldown(float amount, float duration)
