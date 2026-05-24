@@ -381,6 +381,11 @@ public class PlayerController : MonoBehaviour, IShootable
             }
         }
 
+        // --- A MARRETA DO RESET ---
+        // Não importa se tinha vida especial, se tava piscando, se tomou dano...
+        // Vai pro Boss? A nave VOLTA pro tamanho 1.0 obrigatoriamente!
+        transform.localScale = originalScale; // (Ou new Vector3(1f, 1f, 1f) para garantir 100%)
+
     }
 
 }

@@ -4987,7 +4987,7 @@ MonoBehaviour:
   lowerBoundary: -10
   destroyDelay: 0.8
   cooldownReductionAmount: 0.8
-  buffDuration: 5
+  buffDuration: 3
 --- !u!96 &4369925832676966540
 TrailRenderer:
   serializedVersion: 2
