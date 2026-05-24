@@ -83,5 +83,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlueAlien
       objectReference: {fileID: 0}
+    - target: {fileID: 8267007312597136427, guid: a50a569462e7e5440a65663032adf4a1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8267007312597136427, guid: a50a569462e7e5440a65663032adf4a1, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a50a569462e7e5440a65663032adf4a1, type: 3}

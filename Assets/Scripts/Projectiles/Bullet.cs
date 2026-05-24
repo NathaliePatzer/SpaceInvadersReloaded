@@ -62,32 +62,49 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<InvadedTrigger>())
-            return;
+        // 1. Ignora áreas de invasão, itens e outras balas
+        if (collision.GetComponent<InvadedTrigger>()) return;
+        if (collision.CompareTag("PowerUp")) return;
+        if (collision.GetComponent<Bullet>()) return;
 
-        // ---  A bala ignora objetos com a Tag "PowerUp" ---
-        if (collision.CompareTag("PowerUp"))
-            return;
-
-        // --- O CONSERTO ESTÁ AQUI: A bala ignora outras balas! ---
-        if (collision.GetComponent<Bullet>())
-            return;
-
+        // 2. Lida com personagens que levam dano (Player e Aliens)
         IShootable shootable = collision.GetComponent<IShootable>();
+
         if (shootable != null)
         {
+            // Se for do time inimigo, acerta!
             if (shootable.GetTeam() != team)
             {
                 shootable.OnShot(this);
             }
+            // Se for fogo amigo, ignora e a bala segue voando.
             else
             {
                 return;
             }
         }
+        else
+        {
+            // --- A INSERÇÃO DE BLINDAGEM DE QA ---
+            // Se o objeto não é um IShootable (ou seja, não é o Player nem os Aliens),
+            // a bala só pode explodir se for uma estrutura física (parede/barreira).
+            // Lembre-se de garantir que as suas barreiras de defesa tenham a tag "Barrier" (ou mude a string abaixo pro nome que usar)!
+            if (!collision.CompareTag("Barrier"))
+            {
+                // Se não for uma barreira, é um colisor secundário (como radar de inimigo). Ignora!
+                return;
+            }
+        }
 
+        // 3. O Fim da Bala! 
+        // Se o código chegou até aqui, é porque ela acertou um alvo inimigo OU uma Barreira.
         speed = 0;
-        animator.SetTrigger("Hit");
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Hit");
+        }
+
         coll.enabled = false;
     }
 }

@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 8630643001859835638}
   - component: {fileID: 8630643001859835637}
   - component: {fileID: 8630643001859835592}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: barrierDamage
-  m_TagString: Untagged
+  m_TagString: Barrier
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,10 +98,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de2f9522054068f47a5676a50d6281d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxLives: 15
   damageSprites:
   - {fileID: 21300000, guid: 5947bb793fd114b449c74183916cfa4e, type: 3}
   - {fileID: 21300000, guid: ffdd158a2751a6d4aafad5f658fcab94, type: 3}
   - {fileID: 21300000, guid: 52e1214bf51c9c34289170323a1d6b38, type: 3}
+  faiscaImpactoPrefab: {fileID: 0}
 --- !u!61 &8630643001859835592
 BoxCollider2D:
   m_ObjectHideFlags: 0

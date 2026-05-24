@@ -10,6 +10,8 @@ TagManager:
   - Bullet
   - Boss
   - PowerUp
+  - Alien
+  - Barrier
   layers:
   - Default
   - TransparentFX
@@ -18,9 +20,9 @@ TagManager:
   - Water
   - UI
   - Portal
-  - 
-  - 
-  - 
+  - Alien
+  - AlienBullet
+  - Barriers
   - 
   - 
   - 
