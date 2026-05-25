@@ -6500,7 +6500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wavePrefabs:
-  - {fileID: 7729077668614923750, guid: 0b63ef876f2f800459598a11f16bf004, type: 3}
+  - {fileID: 8115644353458991083, guid: a4ac27b482eb936429f0affebcf420dd, type: 3}
   - {fileID: 6023491495992888228, guid: bf5f13b118e398a44873a43500e3057b, type: 3}
   - {fileID: 8999502839644509492, guid: cb870b5210c76724d830979ddc7400a0, type: 3}
   - {fileID: 5091044523121891460, guid: 4da532c884e91b94cb2fbd1402ccc165, type: 3}

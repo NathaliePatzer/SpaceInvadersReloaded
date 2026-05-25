@@ -115,8 +115,8 @@ public class WaveManager : MonoBehaviour
         // 2. Mostra o texto de VICTORY na tela
         if (waveText != null)
         {
-            waveText.text = "Victory";
-            waveText.color = Color.yellow; // Cor de ouro!
+            waveText.text = "VICTORY";
+            waveText.color = new Color(0.208f, 0.988f, 0.573f);
             waveText.gameObject.SetActive(true);
         }
 

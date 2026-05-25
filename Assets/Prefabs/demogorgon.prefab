@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 8003242543778015921}
   - component: {fileID: 8003242543778015920}
   - component: {fileID: 8003242543778015923}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: demogorgon
-  m_TagString: Untagged
+  m_TagString: Barrier
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -149,7 +149,25 @@ MonoBehaviour:
   maxHealth: 50
   demobatPrefab: {fileID: 3217200970416303107, guid: a5be81f916b0f0b4395d4c0bbfba036b, type: 3}
   wafflePowerUp: {fileID: 3034447351968290402, guid: dea71f1eb509f83468ac5a4cae0e649b, type: 3}
+  waffleDropChancePercent: 5
   teleportInterval: 3
   minX: -8
   maxX: 8
   fixedY: 4
+  hitColor: {r: 1, g: 1, b: 1, a: 1}
+  flashDuration: 0.1
+  portalPrefab: {fileID: 0}
+  portalAnimationTime: 1
+  teleportBlinkCount: 3
+  teleportBlinkDuration: 0.1
+  lifebarRenderer: {fileID: 0}
+  lifebarSprites: []
+  audioSource: {fileID: 0}
+  hitSound: {fileID: 0}
+  portalSound: {fileID: 0}
+  attackSound: {fileID: 0}
+  deathSound: {fileID: 0}
+  rupiaPrefabs: []
+  quantidadeRupias: 8
+  forcaExplosaoMin: 4
+  forcaExplosaoMax: 8

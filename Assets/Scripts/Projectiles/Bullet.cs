@@ -89,6 +89,7 @@ public class Bullet : MonoBehaviour
             // Se o objeto não é um IShootable (ou seja, não é o Player nem os Aliens),
             // a bala só pode explodir se for uma estrutura física (parede/barreira).
             // Lembre-se de garantir que as suas barreiras de defesa tenham a tag "Barrier" (ou mude a string abaixo pro nome que usar)!
+            //Demogorgon e Demobats também precisam da tag para que a colisão com eles seja detectada como válida
             if (!collision.CompareTag("Barrier"))
             {
                 // Se não for uma barreira, é um colisor secundário (como radar de inimigo). Ignora!

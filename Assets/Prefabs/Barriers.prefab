@@ -52,7 +52,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8630643001859835637, guid: a28334e1774b94444ae4038d529c2b1d, type: 3}
       propertyPath: maxLives
-      value: 40
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8630643001859835637, guid: a28334e1774b94444ae4038d529c2b1d, type: 3}
       propertyPath: faiscaImpactoPrefab
@@ -164,7 +164,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8630643001859835637, guid: a28334e1774b94444ae4038d529c2b1d, type: 3}
       propertyPath: maxLives
-      value: 40
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8630643001859835637, guid: a28334e1774b94444ae4038d529c2b1d, type: 3}
       propertyPath: faiscaImpactoPrefab
@@ -276,7 +276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8630643001859835637, guid: a28334e1774b94444ae4038d529c2b1d, type: 3}
       propertyPath: maxLives
-      value: 40
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8630643001859835637, guid: a28334e1774b94444ae4038d529c2b1d, type: 3}
       propertyPath: faiscaImpactoPrefab
@@ -388,7 +388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8630643001859835637, guid: a28334e1774b94444ae4038d529c2b1d, type: 3}
       propertyPath: maxLives
-      value: 40
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 8630643001859835637, guid: a28334e1774b94444ae4038d529c2b1d, type: 3}
       propertyPath: faiscaImpactoPrefab
