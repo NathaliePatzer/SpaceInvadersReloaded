@@ -22,18 +22,28 @@ public class Bullet : MonoBehaviour
 
     private bool isBeingAttracted = false;
     private Vector2 targetPortalPosition;
+    private float velocidadeOriginal;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        velocidadeOriginal = speed; // Salva a velocidade no primeiro frame!
     }
 
     void OnEnable()
     {
         coll.enabled = true;
         isBeingAttracted = false; // Reset ao ativar
+
+        // --- A FAXINA DO ESTADO ZUMBI ---
+        speed = velocidadeOriginal; // Devolve a velocidade
+        if (animator != null)
+        {
+            animator.ResetTrigger("Hit"); // Limpa a ordem de explodir da vida passada
+            // Se necessário, força a animação de voo: animator.Play("NOME_DA_ANIMACAO_DE_VOO");
+        }
     }
 
     private void FixedUpdate()
