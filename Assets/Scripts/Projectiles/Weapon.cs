@@ -94,6 +94,23 @@ public class Weapon : MonoBehaviour
         instantiated.speed = bulletSpeed;
         instantiated.team = shootable.GetTeam();
 
+        // --- O EXORCISMO DO HEISENBUG (Bullets nascendo já com animação de morte) ---
+        // 1. Religa o colisor (caso a bala tenha morrido e desligado ele na vida passada)
+        Collider2D colBala = instantiated.GetComponent<Collider2D>();
+        if (colBala != null)
+        {
+            colBala.enabled = true;
+        }
+
+        // 2. Lava o cérebro do Animator para o estado original!
+        Animator animBala = instantiated.GetComponent<Animator>();
+        if (animBala != null)
+        {
+            animBala.Rebind(); // Reseta para a caixinha laranja
+            animBala.Update(0f); // Força a atualização visual no frame zero
+        }
+        // ----------------------------------------------
+
         // 4. Liga a bala - Agora a física sabe exatamente para onde ir e tem os dados limpos!
         instantiated.gameObject.SetActive(true);
     }

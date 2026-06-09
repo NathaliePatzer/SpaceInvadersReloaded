@@ -107,6 +107,9 @@ public class Bullet : MonoBehaviour
             }
         }
 
+        // --- A CAIXA PRETA DE QA ---
+        Debug.Log($"<color=magenta>[CAIXA PRETA]</color> Bala explodiu! O assassino foi o objeto: <b>{collision.gameObject.name}</b> (Tag: {collision.gameObject.tag})");
+
         // 3. O Fim da Bala! 
         // Se o código chegou até aqui, é porque ela acertou um alvo inimigo OU uma Barreira.
         speed = 0;
