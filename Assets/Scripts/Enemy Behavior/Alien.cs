@@ -36,6 +36,8 @@ public class Alien : AlienBase, IShootable
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(3, 15));
+            // MODO METRALHADORA ON
+            // yield return new WaitForSeconds(Random.Range(1, 8));
             Shoot();
         }
     }
@@ -44,4 +46,5 @@ public class Alien : AlienBase, IShootable
     {
         weapon.ShootBullet();
     }
+
 }

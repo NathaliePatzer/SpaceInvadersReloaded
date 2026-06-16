@@ -19,6 +19,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bullet_Alien
       objectReference: {fileID: 0}
+    - target: {fileID: 1202443028619602890, guid: 7d3a7d7521a15c3429108b6f7ccc54ff, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1202443028619602890, guid: 7d3a7d7521a15c3429108b6f7ccc54ff, type: 3}
+      propertyPath: m_TagString
+      value: AlienProjectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 3063043888504675687, guid: 7d3a7d7521a15c3429108b6f7ccc54ff, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3150726650484128928, guid: 7d3a7d7521a15c3429108b6f7ccc54ff, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -7,48 +7,118 @@ public enum Team
     Player,
     Aliens,
 }
+
 public class Bullet : MonoBehaviour
 {
     [HideInInspector]
     public Team team;
+
     public Vector2 direction;
     public float speed;
-    Rigidbody2D rb;
-    Animator animator;
-    Collider2D coll;
+
+    private Rigidbody2D rb;
+    private Animator animator;
+    private Collider2D coll;
+
+    private bool isBeingAttracted = false;
+    private Vector2 targetPortalPosition;
+    private float velocidadeOriginal;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         coll = GetComponent<Collider2D>();
+        velocidadeOriginal = speed; // Salva a velocidade no primeiro frame!
     }
+
     void OnEnable()
     {
         coll.enabled = true;
+        isBeingAttracted = false; // Reset ao ativar
+
+        // --- A FAXINA DO ESTADO ZUMBI ---
+        speed = velocidadeOriginal; // Devolve a velocidade
+        if (animator != null)
+        {
+            animator.ResetTrigger("Hit"); // Limpa a ordem de explodir da vida passada
+            // Se necessário, força a animação de voo: animator.Play("NOME_DA_ANIMACAO_DE_VOO");
+        }
     }
+
     private void FixedUpdate()
     {
-        rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
+        if (isBeingAttracted)
+        {
+            Vector2 directionToPortal = (targetPortalPosition - rb.position).normalized;
+            rb.MovePosition(rb.position + directionToPortal * speed * Time.fixedDeltaTime);
+        }
+        else
+        {
+            rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
+        }
     }
+
+    public void SetAttractionTarget(Vector2 portalPosition)
+    {
+        isBeingAttracted = true;
+        targetPortalPosition = portalPosition;
+    }
+
+    public void ClearAttractionTarget()
+    {
+        isBeingAttracted = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<InvadedTrigger>())
-            return;
+        // 1. Ignora áreas de invasão, itens e outras balas
+        if (collision.GetComponent<InvadedTrigger>()) return;
+        if (collision.CompareTag("PowerUp")) return;
+        if (collision.GetComponent<Bullet>()) return;
 
+        // 2. Lida com personagens que levam dano (Player e Aliens)
         IShootable shootable = collision.GetComponent<IShootable>();
+
         if (shootable != null)
         {
+            // Se for do time inimigo, acerta!
             if (shootable.GetTeam() != team)
             {
                 shootable.OnShot(this);
             }
+            // Se for fogo amigo, ignora e a bala segue voando.
             else
             {
                 return;
             }
         }
+        else
+        {
+            // --- A INSERÇÃO DE BLINDAGEM DE QA ---
+            // Se o objeto não é um IShootable (ou seja, não é o Player nem os Aliens),
+            // a bala só pode explodir se for uma estrutura física (parede/barreira).
+            // Lembre-se de garantir que as suas barreiras de defesa tenham a tag "Barrier" (ou mude a string abaixo pro nome que usar)!
+            //Demogorgon e Demobats também precisam da tag para que a colisão com eles seja detectada como válida
+            if (!collision.CompareTag("Barrier"))
+            {
+                // Se não for uma barreira, é um colisor secundário (como radar de inimigo). Ignora!
+                return;
+            }
+        }
+
+        // --- A CAIXA PRETA DE QA ---
+        Debug.Log($"<color=magenta>[CAIXA PRETA]</color> Bala explodiu! O assassino foi o objeto: <b>{collision.gameObject.name}</b> (Tag: {collision.gameObject.tag})");
+
+        // 3. O Fim da Bala! 
+        // Se o código chegou até aqui, é porque ela acertou um alvo inimigo OU uma Barreira.
         speed = 0;
-        animator.SetTrigger("Hit");
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Hit");
+        }
+
         coll.enabled = false;
     }
 }

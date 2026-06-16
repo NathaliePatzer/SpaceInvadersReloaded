@@ -5,14 +5,18 @@ using UnityEngine;
 public class PoolingSystem : MonoBehaviour
 {
     public static PoolingSystem Instance;
+
     Dictionary<string, Queue<Bullet>> stored;
+    public List<Bullet> activeBullets = new List<Bullet>(); // ✅ Lista de projéteis ativos
     GameObject bulletHolder;
+
     void Awake()
     {
         Instance = this;
         stored = new Dictionary<string, Queue<Bullet>>();
         bulletHolder = GameObject.Find("BulletHolder");
     }
+
     public Bullet GetBullet(Bullet bulletPrefab)
     {
         string bulletKey = bulletPrefab.name;
@@ -36,12 +40,19 @@ public class PoolingSystem : MonoBehaviour
                 toReturn = currentQueue.Dequeue();
             }
         }
+
         toReturn.name = bulletKey;
+        toReturn.gameObject.SetActive(true);
+        activeBullets.Add(toReturn); // ✅ registra como ativo
         return toReturn;
     }
+
     public void StoreBullet(Bullet toStore)
     {
         stored[toStore.name].Enqueue(toStore);
+        activeBullets.Remove(toStore); // ✅ remove da lista de ativos
         toStore.gameObject.SetActive(false);
     }
+
+    public Dictionary<string, Queue<Bullet>> Stored => stored;
 }

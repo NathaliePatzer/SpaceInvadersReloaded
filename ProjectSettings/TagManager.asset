@@ -3,18 +3,26 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - AlienProjectile
+  - Portal
+  - SpecialHeart
+  - Bullet
+  - Boss
+  - PowerUp
+  - Alien
+  - Barrier
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
+  - Portal
+  - Alien
+  - AlienBullet
+  - Barriers
   - 
   - 
   - 
