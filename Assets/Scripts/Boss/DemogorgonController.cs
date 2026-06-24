@@ -122,6 +122,10 @@ public class DemogorgonController : MonoBehaviour
         if (spriteRenderer != null) spriteRenderer.enabled = true;
         if (bossCollider != null) bossCollider.enabled = true;
 
+        // --> AQUI VOCÊ LIBERA OS BUFFS PARA A LUTA! <--
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player != null) player.LiberarBuffs();
+
         // 5. Espera a outra metade da animação do portal terminar
         yield return new WaitForSeconds(portalAnimationTime / 2f);
         if (activePortal != null) Destroy(activePortal); // Destrói usando a variável

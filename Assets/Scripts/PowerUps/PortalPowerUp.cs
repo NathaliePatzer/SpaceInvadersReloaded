@@ -26,6 +26,15 @@ public class PortalPowerUp : MonoBehaviour
 
         collected = true;
 
+        // --- A TRAVA DE TRANSICAO DE FASE AQUI ---
+        // Procuramos o Player na cena inteira. Se ele for nulo (desativado na transição)
+        // OU se ele estiver com os buffs travados, barramos o Olho do Ender na hora!
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player == null || !player.podeReceberBuffs)
+        {
+            return;
+        }
+
         Vector3 portalPosition = new Vector3(0f, -1.63f, 0f);
         GameObject existingPortal = GameObject.FindWithTag("Portal");
 
@@ -68,6 +77,14 @@ public class PortalPowerUp : MonoBehaviour
     {
         Instantiate(entryEffectPrefab, portalPosition, Quaternion.identity);
         yield return new WaitForSeconds(entryEffectDuration);
+
+        // --- DOUBLE CHECK DE SEGURANÇA DE TRANSICAO DE FASE---
+        // Se após os 0.8 segundos do efeito o player sumiu ou travou, cancela o nascimento do portal!
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player == null || !player.podeReceberBuffs)
+        {
+            yield break; // Cancela a execução da Coroutine imediatamente
+        }
 
         GameObject portal = Instantiate(portalPrefab, portalPosition, Quaternion.identity);
         portal.GetComponent<PortalController>().StartPortal(portalDuration);
