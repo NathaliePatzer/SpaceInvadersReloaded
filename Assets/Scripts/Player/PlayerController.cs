@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour, IShootable
     private Vector3 originalScale;
     private bool isInvincibleFlag = false;
 
+    [Header("Controle de Fases")]
+    public bool podeReceberBuffs = true; // Trava de bloqueio dos power ups
+
     [Header("Efeitos Visuais")]
     public ParticleSystem particulasFogoRapido; // Arraste o Particle System recém-criado para cá no Inspector
 
@@ -123,6 +126,8 @@ public class PlayerController : MonoBehaviour, IShootable
 
     public bool TentarRecuperarVida()
     {
+        if (!podeReceberBuffs) return false; // Segurança barra a cura da maçã na transição
+
         // Só recupera se o jogador tiver menos de 3 vidas
         if (lives < 3)
         {
@@ -180,6 +185,8 @@ public class PlayerController : MonoBehaviour, IShootable
 
     public void ReduceWeaponCooldown(float amount, float duration)
     {
+        if (!podeReceberBuffs) return; // Segurança barra o Starfruit/Waffle
+
         if (cooldownRoutine != null)
         {
             StopCoroutine(cooldownRoutine);
@@ -212,6 +219,8 @@ public class PlayerController : MonoBehaviour, IShootable
 
     public void ActivateSpecialLife(float duration, Vector3 newScale)
     {
+        if (!podeReceberBuffs) return; // Segurança barra o Cogumelo/Coração Especial
+
         if (hasSpecialLife)
         {
             if (specialLifeRoutine != null)
@@ -288,6 +297,8 @@ public class PlayerController : MonoBehaviour, IShootable
     // Essa é a função que a Triforce chama!
     public void AtivarTiroTriplo()
     {
+        if (!podeReceberBuffs) return; // Segurança barra a Triforce
+
         // Se a nave tem uma arma equipada, manda ela ligar o poder
         if (weapon != null)
         {
@@ -313,6 +324,8 @@ public class PlayerController : MonoBehaviour, IShootable
     // --- O BOTÃO DE PÂNICO: PREPARAÇÃO PARA O BOSS ---
     public void LimparTodosOsBuffs()
     {
+        podeReceberBuffs = false; // <-- TRANCA A PORTA PARA NOVOS BUFFS!
+
         // 1. FAXINA DA ARMA (Tiro Triplo)
         if (weapon != null)
         {
@@ -386,6 +399,11 @@ public class PlayerController : MonoBehaviour, IShootable
         // Vai pro Boss? A nave VOLTA pro tamanho 1.0 obrigatoriamente!
         transform.localScale = originalScale; // (Ou new Vector3(1f, 1f, 1f) para garantir 100%)
 
+    }
+
+    public void LiberarBuffs()
+    {
+        podeReceberBuffs = true; // Abre a porta de novo!
     }
 
 }
