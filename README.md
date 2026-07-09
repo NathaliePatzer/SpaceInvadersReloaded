@@ -33,7 +33,7 @@ O projeto foi construído na Unity com scripts em C#. Todo o código é versiona
 
 - Otimização Matemática: Sistema de *Bounding Box* calculada dinamicamente em tempo real para o grupo de aliens, poupando processamento físico de colisores.
 
-- Uma pitada de Turing & Trigonometria: Máquina de estados finita para as fases do Demogorgon e uso da função Mathf.Sin (onda senoidal) contínua para o voo dos Demobats.
+- Uma pitada de Turing & Trigonometria: Máquina de estados finita para as fases do Demogorgon e uso da função *Mathf.Sin* (onda senoidal) contínua para o voo dos Demobats.
 
 - Prevenção de Falhas (*Edge Cases*): Blindagem contra violação de limites de vetor (*Out-of-Bounds*), tratamento rigoroso de rotinas assíncronas (*Coroutines*) nas transições de fases e bloqueio contra *softlocks* de inputs, condição de corrida em danos simultâneos (*Race Condition*), prevenção de colisão múltipla irregular (*Double Hit*) e prevenção de vazamento de memória (*Memory Leak*).
 
@@ -44,7 +44,7 @@ Além do código, você pode dar uma espiadinha no *Guia Contra Invasões Alien�
 ## 📬 Fale Comigo
 
 Quer trocar ideia, sugerir algo ou só dar um alô? Me chama lá no Instagram:  
-👩‍💻 [@nath_p.cpp](https://www.instagram.com/nath_p.cpp/)
+👩‍💻 [@neblina.th](https://www.instagram.com/neblina.th/)
 
 Divirta-se e bora salvar a galáxia! 🌌👾🔥
 
